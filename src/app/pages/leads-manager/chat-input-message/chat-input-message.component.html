@@ -1,0 +1,20 @@
+
+<form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-form">
+  <div class="flex chat-input-container">
+    <p-button icon="pi pi-face-smile" (onClick)="toggleEmogiPopover($event)" styleClass="icon-button"></p-button>
+    <p-button icon="pi pi-paperclip" styleClass="icon-button"></p-button>
+    <textarea pTextarea
+      formControlName="message"
+      [autoResize]="true"
+      rows="1"
+      class="chat-input mb-2"
+      (keydown.enter)="sendMessage()">
+    </textarea>
+
+    <p-button icon="pi pi-send" styleClass="icon-button" type="submit"></p-button>
+  </div>
+</form>
+
+<p-popover #popover>
+  <emoji-picker class="light" (emoji-click)="onEmojiSelected($event)" ></emoji-picker>
+</p-popover>

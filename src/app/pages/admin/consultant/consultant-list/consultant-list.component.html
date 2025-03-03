@@ -1,0 +1,109 @@
+<p-card [style]="{ height: '100%'}">
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <p-button
+          icon="pi pi-plus"
+          [raised]="true"
+          label="Novo Consultor"
+          [style]="{ marginRight: '0.4rem' }"
+          severity="secondary"
+          (onClick)="registerConsultant()"
+        />
+
+        <p-button
+          [disabled]="!activeEditButton"
+          icon="pi pi-pencil"
+          [raised]="true"
+          label="Editar Consultor"
+          severity="primary"
+          (onClick)="editConsultant()"
+        />
+      </ng-template>
+      <ng-template pTemplate="right">
+        <p-button
+          [disabled]="!activeEditButton"
+          icon="pi pi-cog"
+          [raised]="true"
+          label="Configurações"
+          severity="primary"
+          (onClick)="editConsultant()"
+        />
+      </ng-template>
+    </p-toolbar>
+
+    <p-table
+      [value]="consultants"
+      [lazy]="true"
+      (onLazyLoad)="loadConsultants($event)"
+      (onRowSelect)="showEditButton()"
+      (onRowUnselect)="showEditButton()"
+      [(selection)]="selectedConsultant"
+      styleClass="p-datatable-gridlines p-datatable-striped"
+      [tableStyle]="{ 'min-width': '50rem', 'margin-top': '1rem' }"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      [showCurrentPageReport]="true"
+      [virtualScrollItemSize]="46"
+      [scrollable]="true"
+      scrollHeight="100%"
+      [resizableColumns]="true"
+      [rowHover]="true"
+      columnResizeMode="expand"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 4rem"></th>
+          <th>
+            Nome
+            <p-columnFilter type="text" field="FullName" display="menu" />
+          </th>
+          <th>
+            Nome de Usuário
+            <p-columnFilter type="text" field="UserName" display="menu" />
+          </th>
+          <th>
+            Email
+            <p-columnFilter type="text" field="Email" display="menu" />
+          </th>
+          <th>
+            Email Confirmado
+            <p-columnFilter type="text" field="EmailConfirmed" display="menu" />
+          </th>
+          <th>
+            Telefone
+            <p-columnFilter type="text" field="PhoneNumber" display="menu" />
+          </th>
+          <th>
+            Usuario Bloqueado
+            <p-columnFilter type="text" field="LockedOut" display="menu" />
+          </th>
+          <th>
+            Ativo
+            <p-columnFilter type="boolean" field="Enabled" display="menu" />
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-consultant>
+        <tr>
+          <td>
+            <p-tableRadioButton [value]="consultant" />
+          </td>
+          <td>{{ consultant.fullName }}</td>
+          <td>{{ consultant.userIdentity.userName }}</td>
+          <td>{{ consultant.userIdentity.email }}</td>
+          <td>{{ consultant.userIdentity.emailConfirmed }}</td>
+          <td>{{ consultant.userIdentity.phoneNumber }}</td>
+          <td>{{ consultant.userIdentity.isLockedOut }}</td>
+          <td>{{ consultant.userIdentity.enabled }}</td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">Sem registros para mostrar.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>

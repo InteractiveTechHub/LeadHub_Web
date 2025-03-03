@@ -1,0 +1,21 @@
+
+services:
+  leadshub_web:
+    container_name: leadshub_web
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "80"
+    volumes:
+      - ./dist/leadweb/browser:/usr/share/nginx/html
+      - ./nginx-angular.conf:/etc/nginx/nginx.conf
+      - ./mime.types:/etc/nginx/mime.types
+    networks:
+      interactive_net:
+        ipv4_address: 172.19.0.10
+
+networks:
+  interactive_net:
+    external: true

@@ -1,0 +1,26 @@
+
+@if(leadId) {
+  <cdk-virtual-scroll-viewport #scrollViewport itemSize="auto" (scroll)="onScroll()" [ngStyle]="{ height: '100%', width: '100%' }">
+    <div *cdkVirtualFor="let item of timelines" class="mx-4">
+      @if (item.messageDateDivider) {
+        <div class="text-center my-4">
+          {{ item.messageDateDivider }}
+        </div>
+      }
+
+      @if(item.message) {
+        <div class="flex mb-2" [ngClass]="{ 'justify-content-end' : item.sender === 2  }">
+          <p-card
+            [ngStyle]="{ minWidth: '20%', maxWidth: '60%',  padding: 0 }"
+            [style]="{backgroundColor: item.sender === 2 ? '#3b82f6' : '#fff', color: item.sender === 2 ? '#ffffff' : '#000000' }">
+            <div>{{ item.message!.body }}</div>
+
+            <div class="flex justify-content-end align-items-end">
+              <small>{{ extractHour(item.messageDate) }}</small>
+            </div>
+          </p-card>
+        </div>
+      }
+    </div>
+  </cdk-virtual-scroll-viewport>
+}

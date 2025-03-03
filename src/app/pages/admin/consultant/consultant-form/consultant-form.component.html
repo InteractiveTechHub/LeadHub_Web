@@ -1,0 +1,245 @@
+<p-panel
+  header="Cadastro Usuário"
+  class="company"
+  styleClass="w-8"
+  [style]="{ maxWidth: '90%', margin: 'auto auto', height: '100%' }"
+>
+  <form [formGroup]="consultantForm" (ngSubmit)="submitAsync()" style="display: flex; flex-direction: column; gap: 1rem; padding-top: 10px">
+
+    <!-- Authentication -->
+    <p-fieldset legend="Autenticação" formGroupName="authData" [style]="{ backgroundColor: 'var(--surface-b)' }">
+      <input type="hidden" formControlName="id" />
+
+      <div class="formgrid grid mt-3">
+
+        <!-- Row 1 -->
+        <div class="field col-4">
+          <p-floatLabel variant="on">
+            <input
+              id="username"
+              type="text"
+              pInputText
+              formControlName="userName"
+              style="width: 100%"
+              variant="filled"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  consultantForm.get('authData.userName')?.invalid &&
+                  consultantForm.get('authData.userName')?.touched
+              }"
+            />
+            <label for="username">Nome de Usuário</label>
+          </p-floatLabel>
+
+          <!-- Error message -->
+          <div>
+            @if (consultantForm.get('authData.userName')?.invalid &&
+              consultantForm.get('authData.userName')?.touched) {
+              <small class="error-field-message">
+                {{ "auth.userNameRequired" | translate }}
+              </small>
+            }
+          </div>
+        </div>
+
+        <div class="field col-4">
+          <p-floatLabel variant="on">
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              style="width: 100%"
+              pKeyFilter="email"
+              variant="filled"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  consultantForm.get('authData.email')?.invalid &&
+                  consultantForm.get('authData.email')?.touched
+              }"
+            />
+            <label for="email">Email</label>
+          </p-floatLabel>
+
+          <!-- Error message -->
+          <div>
+            @if (consultantForm.get('authData.email')?.invalid &&
+              consultantForm.get('authData.email')?.touched) {
+              <small class="error-field-message">
+                {{ "auth.emailRequired" | translate }}
+              </small>
+            }
+          </div>
+        </div>
+
+        <div class="field col-4">
+          <p-floatLabel variant="on">
+            <p-inputmask
+              id="phoneNumber"
+              mask="(99) 99999-9999"
+              formControlName="phoneNumber"
+              variant="filled"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  consultantForm.get('authData.phoneNumber')?.invalid &&
+                  consultantForm.get('authData.phoneNumber')?.touched
+              }"
+            />
+            <label for="phoneNumber">Telefone</label>
+          </p-floatLabel>
+
+          <!-- Error message -->
+          <div>
+            @if (consultantForm.get('authData.phoneNumber')?.invalid &&
+              consultantForm.get('authData.phoneNumber')?.touched) {
+              <small class="error-field-message">
+                {{ "auth.phoneNumberRequired" | translate }}
+              </small>
+            }
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="field col-4 mt-3">
+          <p-floatLabel variant="on">
+            <p-select
+              id="roles"
+              [options]="roles"
+              optionLabel="name"
+              formControlName="roles"
+              styleClass="w-full"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  consultantForm.get('authData.roles')?.invalid &&
+                  consultantForm.get('authData.roles')?.touched
+              }"
+            />
+            <label for="roles">Permissões</label>
+          </p-floatLabel>
+
+          <!-- Error message -->
+          <div>
+            @if (consultantForm.get('authData.roles')?.invalid &&
+              consultantForm.get('authData.roles')?.touched) {
+              <small class="error-field-message">
+                {{ "auth.rolesRequired" | translate }}
+              </small>
+            }
+          </div>
+        </div>
+      </div>
+    </p-fieldset>
+
+    <!-- Consultant -->
+    <p-fieldset legend="Consultor" formGroupName="consultantData" [style]="{ backgroundColor: 'var(--surface-b)' }">
+      <input type="hidden" formControlName="id" />
+      <!--
+      <input type="hidden" formControlName="companyId" />
+      -->
+
+      <!-- Row 1 -->
+      <!--
+      <div class="formgrid grid mt-3">
+        <div class="col-12">
+          <p-floatLabel variant="on">
+            <input
+              id="brandName"
+              [value]="companyName"
+              pInputText
+              class="w-5"
+              disabled="true"
+              variant="filled"
+            />
+            <label for="brandName">Empresa</label>
+          </p-floatLabel>
+        </div>
+      </div>
+      -->
+
+
+      <!-- Row 2 -->
+      <div class="col-12 grid mt-3">
+        <div class="field col-3 mt-3">
+          <p-floatLabel variant="on">
+            <input
+              id="fullName"
+              pInputText
+              formControlName="fullName"
+              style="width: 100%"
+              variant="filled"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  consultantForm.get('consultantData.fullName')?.invalid &&
+                  consultantForm.get('consultantData.fullName')?.touched
+              }"
+            />
+            <label for="fullName">Nome Completo</label>
+          </p-floatLabel>
+
+          <!-- Error message -->
+          <div>
+            @if (consultantForm.get('consultantData.fullName')?.invalid &&
+              consultantForm.get('consultantData.fullName')?.touched) {
+              <small class="error-field-message">
+                {{ "consultant.fullNameRequired" | translate }}
+              </small>
+            }
+          </div>
+        </div>
+
+        <!--
+        <div class="field col-9 mt-3">
+          <p-floatLabel variant="on">
+            <p-calendar
+              id="birthDate"
+              formControlName="birthDate"
+              [showIcon]="true"
+              [showOnFocus]="true"
+              [readonlyInput]="false"
+              inputId="buttondisplay"
+              variant="filled"
+            />
+            <label for="birthDate">Data de Nascimento</label>
+          </p-floatLabel>
+        </div>
+        -->
+      </div>
+    </p-fieldset>
+
+    <p-fieldset legend="Empresas" [style]="{ backgroundColor: 'var(--surface-b)' }">
+      <div class="card">
+        <p-picklist
+            [source]="sourceCompanies"
+            [target]="targetCompanies"
+            [dragdrop]="true"
+            [responsive]="true"
+            [sourceStyle]="{ height: '30rem' }"
+            [targetStyle]="{ height: '30rem' }"
+            breakpoint="1400px">
+
+            <ng-template let-item #item>
+                {{ item.brandName }}
+            </ng-template>
+        </p-picklist>
+    </div>
+    </p-fieldset>
+
+    <!-- footer -->
+    <div class="flex justify-content-between">
+      <div class="flex" formGroupName="authData">
+        <p-toggleswitch id="enabled" formControlName="enabled" />
+        <div style="margin-left: 0.4rem">
+          <label for="enabled">
+            {{
+              consultantForm.get("consultantData.enabled")?.value
+                ? "Ativo"
+                : "Inativo"
+            }}
+          </label>
+        </div>
+      </div>
+
+      <p-button type="submit">Salvar</p-button>
+    </div>
+  </form>
+</p-panel>

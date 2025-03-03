@@ -1,0 +1,23 @@
+
+:host {
+  ::ng-deep .lead-card {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  ::ng-deep .lead-card:hover {
+    transform: scale(1.02);
+    border: 2px solid #007bff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .lead-name-text {
+    color: #2563eb;
+  }
+
+  .lastMessage-bubble {
+    background-color: var(--p-surface-700);
+    color: #fff;
+  }
+}
+

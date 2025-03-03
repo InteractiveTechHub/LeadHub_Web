@@ -1,0 +1,377 @@
+
+<p-panel
+  [header]="panelTitle"
+  class="company"
+  [style]="{ maxWidth: '90%', margin: 'auto auto', height: '100%' }">
+  <form
+    [formGroup]="companyForm"
+    (ngSubmit)="submit()"
+    style="display: flex; flex-direction: column; gap: 1rem; padding-top: 10px"
+  >
+    <!-- company wrapper -->
+    <p-fieldset legend="Info Empresa" formGroupName="companyData" [style]="{ backgroundColor: 'var(--surface-b)' }">
+      <input type="hidden" formControlName="id">
+
+      <!-- 1st row -->
+      <div class="flex mt-4" style="flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem">
+        <!-- Identification Number -->
+        <div style="margin-right: 0.3rem">
+          <p-inputGroup>
+            <p-float-label variant="on">
+            <input
+              id="identificationNumber"
+              pInputText
+              formControlName="identificationNumber"
+              pKeyFilter="int"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('companyData.identificationNumber')
+                    ?.invalid &&
+                  companyForm.get('companyData.identificationNumber')?.touched
+              }"
+            />
+
+            <label for="identificationNumber">CNPJ</label>
+          </p-float-label>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-search"
+              class="p-button-secondary"
+              (click)="searchCompany()"
+            ></button>
+          </p-inputGroup>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('companyData.identificationNumber')?.invalid &&
+            companyForm.get('companyData.identificationNumber')?.touched) {
+            <small class="error-field-message">
+              {{ "company.identificationNumberRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+
+        <!-- Legal Name -->
+        <div style="flex: 1; min-width: 200px">
+          <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="companyLegalName"
+              pInputText
+              formControlName="legalName"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('companyData.legalName')?.invalid &&
+                  companyForm.get('companyData.legalName')?.touched
+              }"
+              style="width: 100%"
+            />
+            <label for="companyLegalName">Razão Social</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('companyData.legalName')?.invalid &&
+            companyForm.get('companyData.legalName')?.touched) {
+            <small class="error-field-message">
+              {{ "company.legalNameRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+
+        <!-- Brand Name -->
+        <div style="flex: 1">
+          <p-floatLabel variant="on">
+            <input
+              id="brandName"
+              pInputText
+              formControlName="brandName"
+              style="width: 100%"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('companyData.brandName')?.invalid &&
+                  companyForm.get('companyData.brandName')?.touched
+              }"
+            />
+            <label for="identificationNumber">Nome Fantasia</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('companyData.brandName')?.invalid &&
+            companyForm.get('companyData.brandName')?.touched) {
+            <small class="error-field-message">
+              {{ "company.brandNameRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- 2nd row -->
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap">
+        <!-- Phone number -->
+        <div style="flex: 1">
+          <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="phoneNumber"
+              pInputText
+              formControlName="phoneNumber"
+              style="width: 100%"
+              pKeyFilter="int"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('companyData.phoneNumber')?.invalid &&
+                  companyForm.get('companyData.phoneNumber')?.touched
+              }"
+            />
+            <label for="phoneNumber">Telefone</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('companyData.phoneNumber')?.invalid &&
+            companyForm.get('companyData.phoneNumber')?.touched) {
+            <small class="error-field-message">
+              {{ "company.phoneNumberRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div style="flex: 1">
+          <p-floatLabel variant="on">
+            <input
+              type="email"
+              id="companyEmail"
+              pInputText
+              formControlName="email"
+              style="width: 100%"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('companyData.email')?.invalid &&
+                  companyForm.get('companyData.email')?.touched
+              }"
+            />
+            <label for="companyEmail">Email</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('companyData.email')?.invalid &&
+            companyForm.get('companyData.email')?.touched) {
+            <small class="error-field-message">
+              {{ "company.emailRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+      </div>
+    </p-fieldset>
+
+    <!-- address wrapper -->
+    <p-fieldset legend="Endereço" formGroupName="addressData" [style]="{ backgroundColor: 'var(--surface-b)' }">
+      <input type="hidden" formControlName="id">
+      <input type="hidden" formControlName="companyId">
+      <!-- 1st row -->
+      <div class="flex mt-4" style="gap: 18px; flex-wrap: wrap">
+        <!-- Zip code -->
+        <div>
+          <p-inputGroup>
+            <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="zipcode"
+              pInputText
+              formControlName="zipCode"
+              style="width: 40%"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('addressData.zipCode')?.invalid &&
+                  companyForm.get('addressData.zipCode')?.touched
+              }"
+            />
+            <label for="zipcode">CEP</label>
+          </p-floatLabel>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-search"
+              class="p-button-secondary"
+              (click)="searchAddressByCEP()"
+            ></button>
+          </p-inputGroup>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('addressData.zipCode')?.invalid &&
+            companyForm.get('addressData.zipCode')?.touched) {
+            <small class="error-field-message">
+              {{ "company.zipcodeRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+
+        <!-- Endereço -->
+        <div style="flex: 1">
+          <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="street"
+              pInputText
+              formControlName="street"
+              style="width: 100%"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('addressData.street')?.invalid &&
+                  companyForm.get('addressData.street')?.touched
+              }"
+            />
+            <label for="street">Rua/Av</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('addressData.street')?.invalid &&
+            companyForm.get('addressData.street')?.touched) {
+            <small class="error-field-message">
+              {{ "company.streetRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+
+        <!-- Endereço -->
+        <div style="width: 80px">
+          <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="number"
+              pInputText
+              formControlName="number"
+              style="width: 100%"
+            />
+            <label for="number">Numero</label>
+          </p-floatLabel>
+        </div>
+      </div>
+
+      <!-- 2nd row -->
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem">
+        <!-- Neighborhood -->
+        <div>
+          <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="neighborhood"
+              pInputText
+              formControlName="neighborhood"
+              style="width: 100%"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('addressData.neighborhood')?.invalid &&
+                  companyForm.get('addressData.neighborhood')?.touched
+              }"
+            />
+            <label for="neighborhood">Bairro</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('addressData.neighborhood')?.invalid &&
+            companyForm.get('addressData.neighborhood')?.touched) {
+            <small class="error-field-message">
+              {{ "company.neighborhoodRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+
+        <!-- City -->
+        <div>
+          <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="city"
+              pInputText
+              formControlName="city"
+              style="width: 100%"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('addressData.city')?.invalid &&
+                  companyForm.get('addressData.city')?.touched
+              }"
+            />
+            <label for="city">Cidade</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('addressData.city')?.invalid &&
+            companyForm.get('addressData.city')?.touched) {
+            <small class="error-field-message">
+              {{ "company.cityRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+
+        <div>
+          <p-floatLabel variant="on">
+            <input
+              type="text"
+              id="state"
+              pInputText
+              formControlName="state"
+              style="width: 100%"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  companyForm.get('addressData.state')?.invalid &&
+                  companyForm.get('addressData.state')?.touched
+              }"
+            />
+            <label for="state">Estado</label>
+          </p-floatLabel>
+
+          <!-- Error messages -->
+          <div>
+            @if (companyForm.get('addressData.state')?.invalid &&
+            companyForm.get('addressData.state')?.touched) {
+            <small class="error-field-message">
+              {{ "company.stateRequired" | translate }}
+            </small>
+            }
+          </div>
+        </div>
+      </div>
+    </p-fieldset>
+
+    <!-- Save Button -->
+    <div style="display: flex; justify-content: space-between">
+      <div
+        formGroupName="companyData"
+        style="display: flex; align-items: center"
+      >
+        <p-toggleswitch id="enabled" formControlName="enabled" />
+        <div style="margin-left: 0.4rem">
+          <label for="enabled">
+            {{
+              companyForm.get("companyData.enabled")?.value
+                ? "Ativo"
+                : "Inativo"
+            }}
+          </label>
+        </div>
+      </div>
+      <div>
+        <p-button type="submit" label="Salvar" icon="pi pi-check" [disabled]="companyForm.invalid"></p-button>
+      </div>
+    </div>
+  </form>
+</p-panel>

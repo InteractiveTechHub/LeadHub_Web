@@ -1,0 +1,68 @@
+<div class="flex h-full overflow-hidden">
+  <div class="flex col h-full shadow-7" style="padding: 0; min-width: 500px">
+    <cdk-virtual-scroll-viewport
+      #scrollViewport
+      itemSize="98"
+      (scrolledIndexChange)="onScroll($event)"
+      [style]="{ height: '100%', width: '100%' }"
+    >
+      <div *cdkVirtualFor="let item of leadCards" class="my-2 message">
+        @if (!leadCards.length) {
+        <div class="flex justify-content-center align-items-center h-full">
+          Não possui leads no momento.
+        </div>
+        }
+
+        <p-card
+          styleClass="mx-2 lead-card"
+          [style]="getCardStyles(item)"
+          (click)="selecionarCard(item)"
+        >
+          <div class="flex justify-content-between">
+            <strong class="lead-name-text">{{ item.leadName }}</strong>
+            <div>{{ DateFormat(item.createdAt) }}</div>
+          </div>
+
+          @if (item.consultantName) {
+          <div>Consultor: {{ item.consultantName }}</div>
+          } @else {
+          <div>Sem consultor</div>
+          }
+
+          <div class="flex justify-content-between mt-2">
+            <div>
+              @if (item.lastMessage) {
+              <p-tag>
+                <div
+                  class="white-space-nowrap overflow-hidden text-overflow-ellipsis mr-2"
+                  style="max-width: 250px"
+                >
+                  {{ item.lastMessage }}
+                </div>
+              </p-tag>
+              }
+            </div>
+            <div>{{ DateFormatMessage(item.lastMessageDate) }}</div>
+          </div>
+        </p-card>
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </div>
+
+  <!-- timeline container-->
+  <div class="flex flex-column w-full">
+    @if (selectedCard) {
+    <p-panel> header </p-panel>
+
+    <div style="flex: 1">
+      <app-timeline
+        [leadId]="selectedCard.leadId!"
+      ></app-timeline>
+    </div>
+
+    <div style="margin-top: auto">
+      <app-chat-input-message></app-chat-input-message>
+    </div>
+    }
+  </div>
+</div>
