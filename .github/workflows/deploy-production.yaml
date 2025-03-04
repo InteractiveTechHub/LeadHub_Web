@@ -39,11 +39,10 @@ jobs:
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.VPS_IP }}
-          key: ${{ secrets.VPS_SSH_KEY }}
+          #key: ${{ secrets.VPS_SSH_KEY }}
           username: ${{ secrets.VPS_USER }}
+          passowrd: ${{ secrets.VPS_PASSWORD }}
           script: |
-            export SSH_OPTS="-o StrictHostKeyChecking=no
-            ssh $SSH_OPTS user@hostname "command_to_run
             cd /opt/leadhub
             sudo docker-compose config  # Verifica a configuração do docker-compose
             sudo docker-compose pull
