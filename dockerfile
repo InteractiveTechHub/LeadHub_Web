@@ -2,7 +2,7 @@ FROM node:latest AS build
 WORKDIR /app
 COPY package*.json ./
 COPY . .
-RUN npm ci
+RUN npm install
 RUN npm run build --configuration=production
 
 FROM nginx:alpine
