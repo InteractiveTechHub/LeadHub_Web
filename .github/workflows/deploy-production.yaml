@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: jsglobaltech/leadshub_web:latest
+          tags: jsglobaltech/leadhub

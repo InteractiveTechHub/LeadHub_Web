@@ -6,7 +6,6 @@ yarn.lock
 dist
 out-tsc
 coverage
-src/environments/
 *.env
 .DS_Store
 Thumbs.db
