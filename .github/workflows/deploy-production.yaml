@@ -1,5 +1,10 @@
 name: Deploy to VPS using Docker Compose
 
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
