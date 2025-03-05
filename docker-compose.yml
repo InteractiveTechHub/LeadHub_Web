@@ -8,10 +8,10 @@ services:
       dockerfile: Dockerfile
     expose:
       - "80"
-    volumes:
-      - ./dist/leadweb/browser:/usr/share/nginx/html
-      - ./nginx-angular.conf:/etc/nginx/nginx.conf
-      - ./mime.types:/etc/nginx/mime.types
+    #volumes:
+    #  - ./dist/leadweb/browser:/usr/share/nginx/html
+    #  - ./nginx-angular.conf:/etc/nginx/nginx.conf
+    #  - ./mime.types:/etc/nginx/mime.types
     networks:
       interactive_net:
         ipv4_address: 172.19.0.10
