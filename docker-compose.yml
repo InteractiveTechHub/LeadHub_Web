@@ -5,7 +5,7 @@ services:
     restart: always
     build:
       context: .
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
       args:
         BUILD_CONFIGURATION: "development"
     expose:

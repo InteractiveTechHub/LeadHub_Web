@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiBase: 'http://localhost:4200',
-  apiUrl: 'http://localhost:4200/api',
+  apiBase: 'http://93.127.215.157',
+  apiUrl: 'http://93.127.215.157/api',
   apiVersion: 'v1',
   environmentName: 'production'
 };
