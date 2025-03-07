@@ -29,6 +29,25 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: jsglobaltech/leadhub:${{ github.sha }}
+          build-args: |
+            BUILD_CONFIGURATION=production
+
+  transfer:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: copy files to server (Docker Compose)
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          #key: ${{ secrets.VPS_SSH_KEY }}
+          source: "${{ github.workspace }}/docker-compose.web.yml"
+          target: "/opt/leadshub"
 
   deploy:
     runs-on: ubuntu-latest
@@ -44,7 +63,7 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
             cd /opt/leadshub
-            sudo docker-compose config  # Verifica a configuração do docker-compose
-            sudo docker-compose pull
-            sudo docker-compose up -d --no-deps --build --remove-orphans
+            sudo docker-compose -f docker-compose.web.yml config
+            sudo docker-compose -f docker-compose.web.yml pull
+            sudo docker-compose -f docker-compose.web.yml up -d --no-deps --build --remove-orphans
             sudo docker image prune -f

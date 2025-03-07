@@ -1,13 +1,8 @@
-
 services:
   leadshub_web:
+    image: jsglobaltech/leadhub:latest
     container_name: leadshub_web
     restart: always
-    build:
-      context: .
-      dockerfile: dockerfile.dev
-      args:
-        BUILD_CONFIGURATION: "development"
     expose:
       - "80"
     networks:

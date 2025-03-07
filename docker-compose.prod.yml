@@ -1,13 +1,12 @@
-
 services:
   leadshub_web:
     container_name: leadshub_web
     restart: always
     build:
       context: .
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
       args:
-        BUILD_CONFIGURATION: "development"
+        BUILD_CONFIGURATION: "production"
     expose:
       - "80"
     networks:
