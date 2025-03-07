@@ -1,6 +1,6 @@
 services:
   leadshub_web:
-    image: jsglobaltech/leadhub_web:latest
+    image: jsglobaltech/leadshub_web:latest
     container_name: leadshub_web
     restart: always
     expose:
