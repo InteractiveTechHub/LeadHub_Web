@@ -28,7 +28,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: jsglobaltech/leadhub:${{ github.sha }}
+          tags: jsglobaltech/leadhub_web:${{ github.sha }}
           build-args: |
             BUILD_CONFIGURATION=production
 
