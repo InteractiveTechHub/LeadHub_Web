@@ -39,6 +39,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Prepare files
+        run: |
+          mkdir -p deploy
+          cp docker-compose.web.yml nginx-angular.conf mime.types deploy/
+
       - name: copy files to server (Docker Compose)
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -46,7 +51,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           #key: ${{ secrets.VPS_SSH_KEY }}
-          source: "${{ github.workspace }}/docker-compose.web.yml,${{ github.workspace }}/nginx-angular.conf,${{ github.workspace }}/mime.types"
+          source: "deploy/*"
           target: "/opt/leadshub"
 
   deploy:
