@@ -68,4 +68,3 @@ jobs:
             sudo docker-compose -f docker-compose.web.yml config
             sudo docker-compose -f docker-compose.web.yml pull
             sudo docker-compose -f docker-compose.web.yml up -d --no-deps --build
-            sudo docker image prune -f
