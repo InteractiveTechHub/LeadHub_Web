@@ -29,10 +29,7 @@ jobs:
           file: ./Dockerfile
           push: true
           build-args: BUILD_CONFIGURATION=production
-          tags: |
-            jsglobaltech/leadshub_web:latest
-            jsglobaltech/leadshub_web:${{ github.sha }}
-
+          tags: jsglobaltech/leadshub_web:latest
 
   transfer:
     runs-on: ubuntu-latest
