@@ -36,25 +36,38 @@ export class SignalRService {
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
+  /**
+   * Receive lead in real time
+   */
   public receiveNewLead() {
-    // listen message "newLead"
     this.hubConnection.on('newLead', () => {
       this.leadSubject.next();
     });
   }
 
-  public joinLeadChat(leadId: string) {
-    this.hubConnection.invoke('JoinLeadChatGroup', leadId)
+  /**
+   * Start to listen the chat session for realtime communication
+   * @param leadIdentifier lead uuid to refer the chat
+   */
+  public joinLeadChat(leadIdentifier: string) {
+    this.hubConnection.invoke('JoinLeadChatGroup', leadIdentifier)
       .catch(err => console.error('Erro ao entrar no grupo do lead:', err));
 
       this.receiveNewMessage();
   }
 
-  public leaveLeadChat(leadId: string) {
-    this.hubConnection.invoke('LeaveLeadChatGroup', leadId)
+  /**
+   * Stop listen the chat session for realtime communication
+   * @param leadIdentifier lead uuid to refer the chat
+   */
+  public leaveLeadChat(leadIdentifier: string) {
+    this.hubConnection.invoke('LeaveLeadChatGroup', leadIdentifier)
       .catch(err => console.error('Erro ao sair do grupo do lead:', err));
   }
 
+  /**
+   * start to listen the new messages
+   */
   private receiveNewMessage() {
     this.hubConnection.on('newMessage', () => {
       this.chatMessagesSubject.next();
