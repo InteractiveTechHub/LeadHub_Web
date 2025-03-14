@@ -4,6 +4,7 @@ export class LeadCard {
   consultantName?: string;
   companyId!: number;
   createdAt!: Date;
+  identifier!: string;
   lastMessage!: string;
   lastMessageDate!: Date;
   leadId?: number;

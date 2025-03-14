@@ -1,11 +1,11 @@
 import { DatePipe, NgClass, NgStyle } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { isSameDay, parseISO } from 'date-fns';
 
 import { MessageText, Timeline } from '@core/models';
 import { FilterRequest } from '@core/requests';
-import { LeadManagerService } from '@core/services';
+import { LeadManagerService, SignalRService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { ChatMessageService } from '@core/services/chat-message.service';
 import { DateFormaterService } from '@core/services/date-formater.service';
@@ -21,10 +21,11 @@ import { DateFormaterService } from '@core/services/date-formater.service';
     ScrollingModule],
   providers: [DateFormaterService],
 })
-export class TimelineComponent implements OnInit, OnChanges {
+export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('scrollViewport', { static: false }) scrollViewport!: CdkVirtualScrollViewport;
 
   @Input() leadId!: number;
+  @Input() leadIdentifier!: string;
 
   timelines!: Timeline[];
   isLoadingTimeline = false;
@@ -33,9 +34,18 @@ export class TimelineComponent implements OnInit, OnChanges {
     private chatService: ChatMessageService,
     private dateService: DateFormaterService,
     private datePipe: DatePipe,
-    private leadService: LeadManagerService) { }
+    private leadService: LeadManagerService,
+    private signalReService: SignalRService) { }
+
+  ngOnDestroy(): void {
+    this.signalReService.leaveLeadChat(this.leadIdentifier);
+  }
 
   ngOnInit(): void {
+    this.signalReService.chatMessages$.subscribe(() => {
+      this.loadMessages();
+    });
+
     this.chatService.messages$.subscribe((message: string) => {
       if (!message) return;
 
@@ -61,6 +71,12 @@ export class TimelineComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['leadId'] && this.leadId) {
+      if (changes['leadIdentifier'].previousValue) {
+        this.signalReService.leaveLeadChat(String(changes['leadIdentifier'].previousValue));
+      }
+
+      this.signalReService.joinLeadChat(this.leadIdentifier);
+
       this.loadMessages();
     }
   }
@@ -85,7 +101,6 @@ export class TimelineComponent implements OnInit, OnChanges {
     this.isLoadingTimeline = true;
 
     const filter = new FilterRequest();
-
     const response = this.leadService.fetchLeadManagerTimelineByRequest(this.leadId, filter)
 
     response.subscribe(r => {
@@ -107,8 +122,6 @@ export class TimelineComponent implements OnInit, OnChanges {
       const currentDate = typeof msg.messageDate === 'string' ? parseISO(msg.messageDate) : msg.messageDate;
 
       msg.messageDateDivider = !lastDate || !isSameDay(currentDate, lastDate) ? this.dateService.getDateLabel(currentDate, true) : '';
-
-      console.log(msg.messageDateDivider)
 
       lastDate = currentDate;
     });
