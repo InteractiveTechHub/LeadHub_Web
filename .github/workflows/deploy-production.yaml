@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            cd /opt/leadshub/github/workspace
-            sudo docker-compose -f docker-compose.web.yml config
-            sudo docker-compose -f docker-compose.web.yml pull
-            sudo docker-compose -f docker-compose.web.yml up -d --no-deps --build
+            cd /opt/leadshub
+            sudo docker-compose config
+            sudo docker-compose pull
+            sudo docker-compose up -d --no-deps --build
