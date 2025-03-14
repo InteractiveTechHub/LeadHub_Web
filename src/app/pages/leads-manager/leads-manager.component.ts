@@ -47,6 +47,7 @@ export class LeadsManagerComponent implements OnInit {
       this.loadLeadCardList();
     });
 
+    // TODO: Should update the lead card without call the api
     this.chatService.leadCard$.subscribe(() => {
       this.loadLeadCardList();
     });
