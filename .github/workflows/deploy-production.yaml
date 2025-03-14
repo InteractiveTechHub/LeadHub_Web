@@ -64,5 +64,5 @@ jobs:
             cd /opt/leadshub
             sudo docker-compose -f docker-compose.web.yml config
             sudo docker-compose -f docker-compose.web.yml pull
+            sudo docker-compose -f docker-compose.web.yml up -d --no-deps
             sudo docker image prune -f
-            sudo docker-compose -f docker-compose.web.yml up -d --no-deps --build
