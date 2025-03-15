@@ -1,19 +1,32 @@
-
 services:
-  leadshub_web:
-    container_name: leadshub_web
-    restart: always
-    build:
-      context: .
-      dockerfile: dockerfile
-      args:
-        BUILD_CONFIGURATION: "development"
+  traefik:
+    image: "traefik:v2.10"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
     ports:
       - "80:80"
-    networks:
-      interactive_net:
-        ipv4_address: 172.19.0.10
+      - "8080:8080" # Painel do Traefik
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
 
-networks:
-  interactive_net:
-    external: true
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`www.tecnoprohub.com`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    depends_on:
+      - traefik
+
+  # backend:
+  #   image: "meu-backend:latest"
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.backend.rule=Host(`api.meudominio.com`)"
+  #     - "traefik.http.services.backend.loadbalancer.server.port=5000"
+  #   depends_on:
+  #     - traefik
