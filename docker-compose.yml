@@ -17,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - 3000:80
     networks:
      - dokploy-network
     labels:
