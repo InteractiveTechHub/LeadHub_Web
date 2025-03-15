@@ -1,0 +1,31 @@
+services:
+  # traefik:
+  #   image: "traefik:v2.10"
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--entrypoints.web.address=:80"
+  #   ports:
+  #     - "80:80"
+  #     - "8080:8080" # Painel do Traefik
+  #   interactive_net:
+  #       ipv4_address: 172.19.0.11
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+     - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`www.tecnoprohub.com`)"
+      - "traefik.http.services.frontend.entrypoints=websecure"
+      - "traefik.http.services.frontend.tls.certResolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+
+networks:
+  dokploy-network:
+    external: true
