@@ -16,6 +16,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.leadshub_web.rule=Host(`www.tecnoprohub.com`)"
-      - "traefik.http.routers.leadshub_web.entrypoints=websecure"
-      - "traefik.http.routers.leadshub_web.tls.certResolver=letsencrypt"
-      - "traefik.http.services.leadshub_web.loadbalancer.server.port=3000"
+      # - "traefik.http.routers.leadshub_web.entrypoints=websecure"
+      # - "traefik.http.routers.leadshub_web.tls.certResolver=letsencrypt"
+      - "traefik.http.services.leadshub_web.loadbalancer.server.port=80"
