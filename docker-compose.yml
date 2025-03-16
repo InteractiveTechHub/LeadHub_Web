@@ -1,3 +1,7 @@
+networks:
+  dokploy-network:
+    external: true
+
 services:
   leadshub_web:
     container_name: leadshub_web
@@ -11,11 +15,7 @@ services:
       - dokploy-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.leadshub_web.rule=Host(`tecnoprohub.com`)"
+      - "traefik.http.routers.leadshub_web.rule=Host(`www.tecnoprohub.com`)"
       - "traefik.http.routers.leadshub_web.entrypoints=websecure"
       - "traefik.http.routers.leadshub_web.tls.certResolver=letsencrypt"
       - "traefik.http.services.leadshub_web.loadbalancer.server.port=3000"
-
-networks:
-  dokploy-network:
-    external: true
