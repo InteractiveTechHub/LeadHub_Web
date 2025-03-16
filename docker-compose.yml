@@ -9,13 +9,11 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - 3000:80
     networks:
       - dokploy-network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.leadshub_web.rule=Host(`www.tecnoprohub.com`)"
-      # - "traefik.http.routers.leadshub_web.entrypoints=websecure"
-      # - "traefik.http.routers.leadshub_web.tls.certResolver=letsencrypt"
+      - "traefik.http.routers.leadshub_web.entrypoints=websecure"
+      - "traefik.http.routers.leadshub_web.tls.certResolver=letsencrypt"
       - "traefik.http.services.leadshub_web.loadbalancer.server.port=80"
