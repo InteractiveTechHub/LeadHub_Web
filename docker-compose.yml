@@ -1,15 +1,34 @@
 services:
+  # traefik:
+  #   image: "traefik:v2.10"
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--entrypoints.web.address=:80"
+  #   networks:
+  #     - interactive_net
+  #   ports:
+  #     - "80:80"
+  #     - "8080:8080" # Painel do Traefik
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+
   leadshub_web:
+    container_name: leadshub_web
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - 3000:80
     networks:
       - dokploy-network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.leadshub_web.rule=Host(`www.tecnoprohub.com`)"
-      - "traefik.http.services.leadshub_web.loadbalancer.server.port=80"
-      
+      - "traefik.http.routers.leadshub_web.rule=Host(`tecnoprohub.com`)"
+      - "traefik.http.routers.leadshub_web.entrypoints=websecure"
+      - "traefik.http.routers.leadshub_web.tls.certResolver=letsencrypt"
+      - "traefik.http.services.leadshub_web.loadbalancer.server.port=3000"
+
 networks:
   dokploy-network:
     external: true
