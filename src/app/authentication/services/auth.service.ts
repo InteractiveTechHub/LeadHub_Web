@@ -17,7 +17,7 @@ export class AuthService {
   constructor(private http: HttpClient, @Inject(PLATFORM_ID) private platformId: object) { }
 
   public async AuthenticateUser(login: LoginModel) : Promise<any> {
-    return this.http.post(`${this.baseUrl}/login`, login);
+    return this.http.post(`${this.baseUrl}/login`, login, { withCredentials: true });
   }
 
   public createAuthenticationAsync(registerModel: RegisterModel) : Observable<any>  {
