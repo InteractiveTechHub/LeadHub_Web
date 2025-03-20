@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChatMessageService } from '@core/services/chat-message.service';
 import { PRIME_NG_MODULES } from '@core/utils';
@@ -8,16 +8,18 @@ import { PopoverModule } from 'primeng/popover';
 
 import 'emoji-picker-element';
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-chat-input-message',
-  imports: [...PRIME_NG_MODULES, ReactiveFormsModule, PopoverModule],
+  imports: [...PRIME_NG_MODULES, ReactiveFormsModule, PopoverModule, NgStyle],
   templateUrl: './chat-input-message.component.html',
   styleUrl: './chat-input-message.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ChatInputMessageComponent implements OnInit {
-  @ViewChild('popover') popover!: Popover;
+  @ViewChild('emojiPopover') emojiPopover!: Popover;
+  @ViewChild('filePopover') filePopover!: Popover;
 
   chatForm!: FormGroup;
 
@@ -31,10 +33,28 @@ export class ChatInputMessageComponent implements OnInit {
     this.buildForm();
   }
 
+  /**
+   * Opens and close emoji popover
+   * @param event
+   */
   toggleEmogiPopover(event: any) {
-    this.popover?.toggle(event);
+    document.documentElement.style.setProperty('--p-popover-background', 'var(--p-surface-800)');
+    this.emojiPopover?.toggle(event);
   }
 
+  /**
+   * Open and close file popover
+   * @param event
+   */
+  toggleFilePopover(event: any) {
+    document.documentElement.style.setProperty('--p-popover-background', 'var(--p-surface-800)');
+    this.filePopover?.toggle(event);
+  }
+
+  /**
+   * Select emoji
+   * @param event
+   */
   onEmojiSelected(event: any) {
     const emoji = event.detail.unicode;
     const messageControl = this.chatForm.get('message');
@@ -44,6 +64,8 @@ export class ChatInputMessageComponent implements OnInit {
       const newMessage = currentMessage + emoji;
       messageControl.setValue(newMessage);
     }
+
+    this.emojiPopover?.toggle(event);
   }
 
   sendMessage() {

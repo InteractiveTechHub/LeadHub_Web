@@ -23,6 +23,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ToolbarModule } from 'primeng/toolbar';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 export const PRIME_NG_MODULES = [
@@ -50,5 +51,6 @@ export const PRIME_NG_MODULES = [
     TextareaModule,
     ToastModule,
     ToggleSwitchModule,
-    ToolbarModule
+    ToolbarModule,
+    TooltipModule
 ];

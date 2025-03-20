@@ -2,12 +2,14 @@
 <form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-form">
   <div class="flex chat-input-container">
     <p-button icon="pi pi-face-smile" (onClick)="toggleEmogiPopover($event)" styleClass="icon-button"></p-button>
-    <p-button icon="pi pi-paperclip" styleClass="icon-button"></p-button>
+    <p-button icon="pi pi-paperclip" styleClass="icon-button" (onClick)="toggleFilePopover($event)"></p-button>
+    <p-button icon="pi pi-list" pTooltip="Enviar Template" tooltipPosition="top" showDelay="700" styleClass="icon-button"></p-button>
+
     <textarea pTextarea
       formControlName="message"
       [autoResize]="true"
       rows="1"
-      class="chat-input mb-2"
+      class="chat-input"
       (keydown.enter)="sendMessage()">
     </textarea>
 
@@ -15,6 +17,15 @@
   </div>
 </form>
 
-<p-popover #popover>
+<p-popover #emojiPopover>
   <emoji-picker class="light" (emoji-click)="onEmojiSelected($event)" ></emoji-picker>
+</p-popover>
+
+<p-popover #filePopover>
+  <div class="flex flex-column gap-1 w-14rem">
+    <p-button icon="pi pi-camera" label="Foto" styleClass="w-full justify-content-start"></p-button>
+    <p-button icon="pi pi-video" label="Vídeo" styleClass="w-full justify-content-start" variant="text"></p-button>
+    <p-button icon="pi pi-file" label="Documento" styleClass="w-full justify-content-start" variant="text"></p-button>
+    <p-button icon="pi pi-map-marker" label="Localização" styleClass="w-full justify-content-start" variant="text"></p-button>
+  </div>
 </p-popover>
