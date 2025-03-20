@@ -12,7 +12,7 @@ import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-chat-input-message',
-  imports: [...PRIME_NG_MODULES, ReactiveFormsModule, PopoverModule, NgStyle],
+  imports: [...PRIME_NG_MODULES, ReactiveFormsModule, PopoverModule],
   templateUrl: './chat-input-message.component.html',
   styleUrl: './chat-input-message.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

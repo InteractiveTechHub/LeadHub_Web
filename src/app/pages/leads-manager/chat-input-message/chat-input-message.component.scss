@@ -2,8 +2,8 @@
 :host ::ng-deep {
   .chat-form {
     width: 100%;
-    padding: 8px;
-    background: var(--p-surface-300);
+    padding: 0 16px 10px 8px;
+    background: transparent; //var(--p-surface-300);
     //border-radius: 8px;
   }
 
