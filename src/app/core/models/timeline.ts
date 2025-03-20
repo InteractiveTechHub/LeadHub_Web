@@ -1,3 +1,4 @@
+import { MessageSender, MessageStatus, MessageType } from "@core/enums";
 import { MessageText } from "./MessageText";
 
 export class Timeline {
@@ -9,9 +10,9 @@ export class Timeline {
   messageFileId?: number;
   messageTextId?: number;
   readAt?: Date;
-  sender!: number;
-  status!: number;
-  type!: number;
+  sender!: MessageSender;
+  status!: MessageStatus;
+  type!: MessageType;
   messageFile: any;
   messageReaction: any;
   message?: MessageText;

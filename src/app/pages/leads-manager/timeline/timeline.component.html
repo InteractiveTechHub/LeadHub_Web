@@ -9,10 +9,10 @@
       }
 
       @if(item.message) {
-        <div class="flex mb-2" [ngClass]="{ 'justify-content-end' : item.sender === 2  }">
+        <div class="flex mb-2" [ngClass]="{ 'justify-content-end' : isConsultant(item.sender)  }">
           <p-card
             [ngStyle]="{ minWidth: '20%', maxWidth: '60%',  padding: 0 }"
-            [style]="{backgroundColor: item.sender === 2 ? '#3b82f6' : '#fff', color: item.sender === 2 ? '#ffffff' : '#000000' }">
+            [style]="{backgroundColor: isConsultant(item.sender) ? '#3b82f6' : '#fff', color: isConsultant(item.sender) ? '#ffffff' : '#000000' }">
             <div>{{ item.message!.body }}</div>
 
             <div class="flex justify-content-end align-items-end">

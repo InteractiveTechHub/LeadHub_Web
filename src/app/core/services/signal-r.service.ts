@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from '@authentication/services';
-import { LeadCard } from '@core/models';
 import { environment } from '@environment/environment';
-import { HubConnection, HubConnectionBuilder, HttpTransportType, LogLevel } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder, HttpTransportType, LogLevel, HubConnectionState } from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -53,7 +52,7 @@ export class SignalRService {
     this.hubConnection.invoke('JoinLeadChatGroup', leadIdentifier)
       .catch(err => console.error('Erro ao entrar no grupo do lead:', err));
 
-      this.receiveNewMessage();
+    this.receiveNewMessage();
   }
 
   /**

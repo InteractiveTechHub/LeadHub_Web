@@ -9,6 +9,7 @@ import { LeadManagerService, SignalRService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { ChatMessageService } from '@core/services/chat-message.service';
 import { DateFormaterService } from '@core/services/date-formater.service';
+import { MessageSender, MessageStatus, MessageType } from '@core/enums';
 
 @Component({
   selector: 'app-timeline',
@@ -51,9 +52,9 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
 
       const timeline = new Timeline();
       timeline.leadId = this.leadId;
-      timeline.sender = 2;
-      timeline.type = 1;
-      timeline.status = 1;
+      timeline.sender = MessageSender.consultant;
+      timeline.type = MessageType.text;
+      timeline.status = MessageStatus.sent;
       timeline.messageDate = new Date();
 
       // apply logic depending of type;
@@ -77,15 +78,17 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
 
       this.signalReService.joinLeadChat(this.leadIdentifier);
 
-      this.loadMessages();
+      //this.loadMessages();
     }
   }
 
-  extractHour(data: Date) {
+  public extractHour(data: Date) {
     return this.datePipe.transform(data, 'HH:mm');
   }
 
-  onScroll() {
+  public isConsultant = (sender: MessageSender) : boolean => sender === MessageSender.consultant;
+
+  public onScroll() {
     //TODO: apply pagination
     if (!this.scrollViewport || this.isLoadingTimeline) return;
 
