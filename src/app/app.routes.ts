@@ -61,6 +61,12 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/admin/consultant/consultant-form/consultant-form.component').then(c => c.ConsultantFormComponent),
         data: { roles: ['SysAdmin'] },
         canActivate: [authGuard]
+      },
+      {
+        path: 'admin/channels',
+        loadComponent: () => import('./pages/admin/channel/channel-list/channel-list.component').then(c => c.ChannelListComponent),
+        data: { roles: ['SysAdmin'] },
+        //canActivate: [authGuard]
       }
     ]
   },
