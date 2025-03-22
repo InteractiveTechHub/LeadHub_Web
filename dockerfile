@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY . .
 RUN npm install
-RUN npm run build
+RUN npm run build --configuration=production
 
 FROM nginx:stable
 COPY --from=build /app/dist/leadweb/browser /usr/share/nginx/html
