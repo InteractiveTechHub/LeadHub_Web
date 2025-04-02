@@ -16,6 +16,8 @@ export class Timeline {
   messageFile: any;
   messageReaction: any;
   message?: MessageText;
+  templateName?: string;
+  templateId?: number;
 
   messageDateDivider?: string;
 }

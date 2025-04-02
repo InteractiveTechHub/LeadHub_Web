@@ -2,6 +2,8 @@ import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
 import { DataViewModule } from 'primeng/dataview';
+import { DialogModule } from 'primeng/dialog';
+import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -18,6 +20,7 @@ import { SelectModule } from 'primeng/select';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SplitterModule } from 'primeng/splitter';
 import { TableModule } from 'primeng/table';
+import { TabsModule } from 'primeng/tabs';
 import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
@@ -31,6 +34,8 @@ export const PRIME_NG_MODULES = [
     CalendarModule,
     CardModule,
     DataViewModule,
+    DialogModule,
+    DividerModule,
     DropdownModule,
     FieldsetModule,
     FloatLabelModule,
@@ -47,6 +52,7 @@ export const PRIME_NG_MODULES = [
     SkeletonModule,
     SplitterModule,
     TableModule,
+    TabsModule,
     TagModule,
     TextareaModule,
     ToastModule,

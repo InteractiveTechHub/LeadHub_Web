@@ -9,6 +9,8 @@ export class LeadCard {
   lastMessageDate!: Date;
   leadId?: number;
   leadName?: string;
+  phoneNumber?: string;
+  email?: string;
   status?: string;
   timelineId?: number;
 }

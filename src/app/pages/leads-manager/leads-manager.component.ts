@@ -12,6 +12,7 @@ import { PRIME_NG_MODULES } from '@core/utils';
 import { TimelineComponent } from "./timeline/timeline.component";
 import { ChatInputMessageComponent } from "./chat-input-message/chat-input-message.component";
 import { DateFormaterService } from '@core/services/date-formater.service';
+import { TemplatesPerType } from '@core/Dtos';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class LeadsManagerComponent implements OnInit {
   leadCards = new Array<LeadCard>();
   filterRequest = new FilterRequest();
   selectedCard?: LeadCard;
+  templates!: TemplatesPerType[];
 
   isLoading: boolean = false;
 
@@ -80,8 +82,15 @@ export class LeadsManagerComponent implements OnInit {
     }*/
   }
 
-  selecionarCard(leadCard: LeadCard) {
-    this.selectedCard = leadCard;
+  selectLead(leadCard: LeadCard) {
+    const response = this.managerService.fetchTemplatesByLeadId(leadCard.leadId!);
+    response.subscribe(res => {
+      this.templates = res.responseData;
+
+      console.log(this.templates)
+
+      this.selectedCard = leadCard;
+    });
   }
 
   private loadLeadCardList() {

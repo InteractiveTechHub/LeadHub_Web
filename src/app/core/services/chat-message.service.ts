@@ -1,22 +1,30 @@
 import { Injectable } from '@angular/core';
+import { Timeline } from '@core/models';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatMessageService {
-  private messageSubject = new BehaviorSubject<string>('');
+  private messageSubject = new BehaviorSubject<Timeline | null>(null);
   private leadCardSubject = new BehaviorSubject<void | null>(null);
+  private chatMessageToolBoxSubject = new BehaviorSubject<boolean>(true);
+
   messages$ = this.messageSubject.asObservable();
   leadCard$ = this.leadCardSubject.asObservable();
+  chatMessageToolBox$ = this.chatMessageToolBoxSubject.asObservable();
 
   constructor() { }
 
-  sendMessage(message: string) {
-    this.messageSubject.next(message);
+  sendMessage(timeline: Timeline) {
+    this.messageSubject.next(timeline);
   }
 
   updateLeadsCard() {
     this.leadCardSubject.next();
+  }
+
+  updateChatMessageToolBox(canSendMessage: boolean) {
+    this.chatMessageToolBoxSubject.next(canSendMessage);
   }
 }

@@ -35,6 +35,8 @@ export class CompanyListComponent {
    */
   public editCompany = () => this.router.navigate([`/admin/company/${this.selectedCompany.id}`]);
 
+  public editChannels = () => this.router.navigate([`/admin/channels`]);
+
   /**
    * Load and populate the table.
    * make request to fetch data

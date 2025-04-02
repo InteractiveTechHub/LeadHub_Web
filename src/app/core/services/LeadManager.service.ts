@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { WhatsAppTemplateDto } from '@core/Dtos/whatsAppTemplateDto';
 import { Timeline } from '@core/models';
 import { FilterRequest } from '@core/requests';
+import { BaseResponse, WhatsAppTemplateResponseDto } from '@core/responses';
 import { TimelineResponse } from '@core/responses/timelineResponse';
 import { environment } from '@environment/environment';
 import { Observable } from 'rxjs';
@@ -20,6 +22,13 @@ export class LeadManagerService {
 
   fetchLeadManagerTimelineByRequest(timelineId: number, filterRequest: FilterRequest) : Observable<TimelineResponse> {
     return this.httpClient.post<TimelineResponse>(`${this.baseUrl}/timeline/${timelineId}`, filterRequest);
+  }
+
+  fetchTemplatesByLeadId(leadId: number) : Observable<WhatsAppTemplateResponseDto> {
+     const params = new HttpParams()
+      .set('leadId', leadId);
+
+    return this.httpClient.get<WhatsAppTemplateResponseDto>(`${this.baseUrl}/leadmanager/templates`, { params });
   }
 
   SendMessageToClient(timeline: Timeline) : Observable<TimelineResponse> {

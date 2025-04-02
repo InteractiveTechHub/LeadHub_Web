@@ -23,6 +23,7 @@
       "@core/*": ["src/app/core/*"],
       "@environment/*": ["src/environments/*"],
       "@page/*": ["src/app/pages/*"],
+      "@repository/*": ["src/app/repository/*"],
     }
   },
   "angularCompilerOptions": {

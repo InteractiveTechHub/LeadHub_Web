@@ -58,9 +58,10 @@ export class SignalRService {
   /**
    * Stop listen the chat session for realtime communication
    * @param leadIdentifier lead uuid to refer the chat
+   * @param leadIdentifier lead id for identificate the lead
    */
-  public leaveLeadChat(leadIdentifier: string) {
-    this.hubConnection.invoke('LeaveLeadChatGroup', leadIdentifier)
+  public leaveLeadChat(leadIdentifier: string, leadId: number) {
+    this.hubConnection.invoke('LeaveLeadChatGroup', leadIdentifier, leadId)
       .catch(err => console.error('Erro ao sair do grupo do lead:', err));
   }
 

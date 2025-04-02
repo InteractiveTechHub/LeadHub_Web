@@ -1,10 +1,7 @@
+import { ChannelFormComponent } from './pages/admin/channel/channel-form/channel-form.component';
 import { Routes } from '@angular/router';
 import { authGuard } from '@authentication/shared';
-import { CompanyFormComponent, CompanyListComponent } from '@page/admin/company';
-import { ConsultantFormComponent, ConsultantListComponent } from '@page/admin/consultant';
 import { LayoutComponent } from '@page/layout';
-import { LeadsManagerComponent } from '@page/leads-manager';
-import { LoginComponent } from '@authentication/login';
 
 
 export const routes: Routes = [
@@ -66,7 +63,13 @@ export const routes: Routes = [
         path: 'admin/channels',
         loadComponent: () => import('./pages/admin/channel/channel-list/channel-list.component').then(c => c.ChannelListComponent),
         data: { roles: ['SysAdmin'] },
-        //canActivate: [authGuard]
+        canActivate: [authGuard]
+      },
+      {
+        path: 'admin/channel/:id',
+        loadComponent: () => import('./pages/admin/channel/channel-form/channel-form.component').then(c => c.ChannelFormComponent),
+        data: { roles: ['SysAdmin'] },
+        canActivate: [authGuard]
       }
     ]
   },

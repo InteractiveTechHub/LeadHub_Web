@@ -1,19 +1,40 @@
 
-<form [formGroup]="chatForm" (ngSubmit)="sendMessage()" class="chat-form">
+<form [formGroup]="chatForm" (ngSubmit)="sendTextMessage()" class="chat-form">
   <div class="flex chat-input-container">
-    <p-button icon="pi pi-face-smile" (onClick)="toggleEmogiPopover($event)" styleClass="icon-button"></p-button>
-    <p-button icon="pi pi-paperclip" styleClass="icon-button" (onClick)="toggleFilePopover($event)"></p-button>
-    <p-button icon="pi pi-list" pTooltip="Enviar Template" tooltipPosition="top" showDelay="700" styleClass="icon-button"></p-button>
+    <p-button icon="pi pi-face-smile"
+      styleClass="icon-button"
+      pTooltip="Enviar Emojis"
+      tooltipPosition="top"
+      showDelay="700"
+      [hidden]="!canSendMessage"
+      (onClick)="toggleEmogiPopover($event)" ></p-button>
+
+    <p-button icon="pi pi-paperclip"
+      styleClass="icon-button"
+      pTooltip="Enviar Arquivos"
+      tooltipPosition="top"
+      showDelay="700"
+      [hidden]="!canSendMessage"
+      (onClick)="toggleFilePopover($event)"></p-button>
+
+    <p-button icon="pi pi-list"
+      styleClass="icon-button"
+      pTooltip="Enviar Template"
+      tooltipPosition="top"
+      showDelay="700"
+      (onClick)="openTemplateDialog($event)"></p-button>
 
     <textarea pTextarea
       formControlName="message"
       [autoResize]="true"
       rows="1"
       class="chat-input"
-      (keydown.enter)="sendMessage()">
+      [readonly]="!canSendMessage"
+      (keydown.control.enter)="handleEnterKeyEvent($event)"
+      (keydown.enter)="sendTextMessage()">
     </textarea>
 
-    <p-button icon="pi pi-send" styleClass="icon-button" type="submit"></p-button>
+    <p-button [icon]="canSendMessage ? 'pi pi-send' : 'pi pi-ban'" styleClass="icon-button" type="submit" [disabled]="!canSendMessage"></p-button>
   </div>
 </form>
 
@@ -29,3 +50,86 @@
     <p-button icon="pi pi-map-marker" label="Localização" styleClass="w-full justify-content-start" variant="text"></p-button>
   </div>
 </p-popover>
+
+
+<p-dialog header="Templates" [(visible)]="templateDialogVisible" [modal]="true" [style]="{ width: '40%' }">
+  <p-scrollpanel>
+    @for (item of templates; track $index) {
+      @if (item.isFollowUpTemplate) {
+        <p-panel header="Perseguição" [toggleable]="true" [style]="{ backgroundColor: 'var(--p-surface-300)'}">
+          @for (template of item.templates; track $index) {
+            <p-card>
+              <div>
+                {{ template.templateBodyMirror }}
+              </div>
+
+              <p-divider />
+              <ng-template #footer>
+                <div class="flex justify-content-end">
+                    <p-button label="Enviar" icon="pi pi-send" iconPos="right" variant="outlined" (onClick)="sendTemplate(template)" />
+                </div>
+            </ng-template>
+            </p-card>
+          }
+        </p-panel>
+      }
+
+      @if (item.isWelcomeMessage) {
+        <p-panel header="Abordagem" [toggleable]="true" [style]="{ backgroundColor: 'var(--p-surface-300)'}">
+          @for (template of item.templates; track $index) {
+            <p-card>
+              <div>
+                {{ template.templateBodyMirror }}
+              </div>
+
+              <p-divider />
+              <ng-template #footer>
+                <div class="flex justify-content-end">
+                    <p-button label="Enviar" icon="pi pi-send" iconPos="right" variant="outlined" />
+                </div>
+            </ng-template>
+            </p-card>
+          }
+        </p-panel>
+      }
+
+      @if (item.isAppointmentTemplate) {
+        <p-panel header="Agendamento" [toggleable]="true" [style]="{ backgroundColor: 'var(--p-surface-300)'}">
+          @for (template of item.templates; track $index) {
+            <p-card>
+              <div>
+                {{ template.templateBodyMirror }}
+              </div>
+
+              <p-divider />
+              <ng-template #footer>
+                <div class="flex justify-content-end">
+                    <p-button label="Enviar" icon="pi pi-send" iconPos="right" variant="outlined" />
+                </div>
+            </ng-template>
+            </p-card>
+          }
+        </p-panel>
+      }
+
+      @if (item.isCustomerFeedBackTemplate) {
+        <p-panel header="Agendamento" [toggleable]="true" [style]="{ backgroundColor: 'var(--p-surface-300)'}">
+          @for (template of item.templates; track $index) {
+            <p-card>
+              <div>
+                {{ template.templateBodyMirror }}
+              </div>
+
+              <p-divider />
+              <ng-template #footer>
+                <div class="flex justify-content-end">
+                    <p-button label="Enviar" icon="pi pi-send" iconPos="right" variant="outlined" />
+                </div>
+            </ng-template>
+            </p-card>
+          }
+        </p-panel>
+      }
+    }
+  </p-scrollpanel>
+</p-dialog>

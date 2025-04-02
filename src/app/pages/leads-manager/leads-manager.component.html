@@ -16,7 +16,7 @@
         <p-card
           styleClass="mx-2 lead-card"
           [style]="getCardStyles(item)"
-          (click)="selecionarCard(item)"
+          (click)="selectLead(item)"
         >
           <div class="flex justify-content-between">
             <strong class="lead-name-text">{{ item.leadName }}</strong>
@@ -52,7 +52,17 @@
   <!-- timeline container-->
   <div class="flex flex-column w-full">
     @if (selectedCard) {
-    <p-panel> header </p-panel>
+    <p-card>
+      <div>
+        <strong class="lead-name-text">{{ selectedCard.leadName }}</strong>
+      </div>
+      <div>
+        {{ selectedCard.phoneNumber }}
+      </div>
+      <div>
+        {{ selectedCard.email }}
+      </div>
+    </p-card>
 
     <div style="flex: 1">
       <app-timeline
@@ -62,7 +72,7 @@
     </div>
 
     <div style="margin-top: auto">
-      <app-chat-input-message></app-chat-input-message>
+      <app-chat-input-message [templates]="templates"/>
     </div>
     }
   </div>

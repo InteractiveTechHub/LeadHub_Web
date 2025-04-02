@@ -1,0 +1,87 @@
+<p-panel
+  [header]="panelTitle"
+  class="company"
+  [style]="{ maxWidth: '90%', margin: 'auto auto', height: '100%' }">
+
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">Configuracões</p-tab>
+      <p-tab value="1">Templates</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <form [formGroup]="whatAppConfigForm" style="display: flex; flex-direction: column; gap: 1rem; padding-top: 10px">
+          <p-fieldset legend="Credenciais">
+            <input type="hidden" formControlName="id">
+
+            <div class="flex gap-2 mt-4">
+              <p-floatLabel variant="on">
+                <input
+                  type="text"
+                  id="name"
+                  formControlName="name"
+                  pInputText
+                  style="width: 100%"
+                />
+                <label for="name">Nome</label>
+              </p-floatLabel>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+              <p-floatLabel variant="on">
+                <input
+                  type="text"
+                  id="businessAccountId"
+                  formControlName="businessAccountId"
+                  pInputText
+                  style="width: 100%"
+                />
+                <label for="businessAccountId">Business Account Id</label>
+              </p-floatLabel>
+
+              <p-floatLabel variant="on">
+                <input
+                  type="text"
+                  id="phoneNumberId"
+                  formControlName="phoneNumberId"
+                  pInputText
+                  style="width: 100%"
+                />
+                <label for="phoneNumberId">Phone Number Id</label>
+              </p-floatLabel>
+
+              <p-floatLabel variant="on">
+                <input
+                  type="text"
+                  id="webHookSecret"
+                  formControlName="webHookSecret"
+                  pInputText
+                  style="width: 100%"
+                />
+                <label for="webHookSecret">Webhook Secret</label>
+              </p-floatLabel>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+              <div class="flex-1">
+
+              <p-floatLabel variant="on">
+                <textarea pTextarea
+                  id="accessToken"
+                  formControlName="accessToken"
+                  rows="4"
+                  style="width: 100%"></textarea>
+                <label for="accessToken">Access Token</label>
+              </p-floatLabel>
+              </div>
+            </div>
+          </p-fieldset>
+        </form>
+      </p-tabpanel>
+
+      <p-tabpanel value="1">
+        <app-whats-app-template-list></app-whats-app-template-list>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</p-panel>

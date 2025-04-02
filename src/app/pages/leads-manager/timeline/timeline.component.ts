@@ -10,6 +10,7 @@ import { PRIME_NG_MODULES } from '@core/utils';
 import { ChatMessageService } from '@core/services/chat-message.service';
 import { DateFormaterService } from '@core/services/date-formater.service';
 import { MessageSender, MessageStatus, MessageType } from '@core/enums';
+import { WhatsAppTemplateDto } from '@core/Dtos';
 
 @Component({
   selector: 'app-timeline',
@@ -39,7 +40,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
     private signalReService: SignalRService) { }
 
   ngOnDestroy(): void {
-    this.signalReService.leaveLeadChat(this.leadIdentifier);
+    this.signalReService.leaveLeadChat(this.leadIdentifier, this.leadId);
   }
 
   ngOnInit(): void {
@@ -47,19 +48,13 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
       this.loadMessages();
     });
 
-    this.chatService.messages$.subscribe((message: string) => {
-      if (!message) return;
+    this.chatService.messages$.subscribe((timeline) => {
+      if (!timeline) return;
 
-      const timeline = new Timeline();
       timeline.leadId = this.leadId;
       timeline.sender = MessageSender.consultant;
-      timeline.type = MessageType.text;
       timeline.status = MessageStatus.sent;
       timeline.messageDate = new Date();
-
-      // apply logic depending of type;
-      timeline.message = new MessageText();
-      timeline.message!.body = message;
 
       //update the ui
       this.timelines = [...this.timelines ?? [], timeline];
@@ -73,7 +68,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['leadId'] && this.leadId) {
       if (changes['leadIdentifier'].previousValue) {
-        this.signalReService.leaveLeadChat(String(changes['leadIdentifier'].previousValue));
+        this.signalReService.leaveLeadChat(changes['leadIdentifier'].previousValue, changes['leadId'].previousValue);
       }
 
       this.signalReService.joinLeadChat(this.leadIdentifier);
@@ -111,6 +106,8 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
         this.timelines = r.responseData;
 
         this.messageDateDivider(this.timelines!);
+
+        this.chatService.updateChatMessageToolBox(r.canSendMessage);
 
         this.scrollToBottom();
       }
