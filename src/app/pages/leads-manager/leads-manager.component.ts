@@ -86,9 +86,6 @@ export class LeadsManagerComponent implements OnInit {
     const response = this.managerService.fetchTemplatesByLeadId(leadCard.leadId!);
     response.subscribe(res => {
       this.templates = res.responseData;
-
-      console.log(this.templates)
-
       this.selectedCard = leadCard;
     });
   }

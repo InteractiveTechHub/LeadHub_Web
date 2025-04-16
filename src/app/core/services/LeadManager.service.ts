@@ -1,9 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { WhatsAppTemplateDto } from '@core/Dtos/whatsAppTemplateDto';
 import { Timeline } from '@core/models';
 import { FilterRequest } from '@core/requests';
-import { BaseResponse, WhatsAppTemplateResponseDto } from '@core/responses';
+import { WhatsAppTemplateResponseDto } from '@core/responses';
 import { TimelineResponse } from '@core/responses/timelineResponse';
 import { environment } from '@environment/environment';
 import { Observable } from 'rxjs';
