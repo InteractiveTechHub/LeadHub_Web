@@ -41,9 +41,9 @@ export class LayoutComponent implements OnInit {
       children: []
     },
     {
-      label: 'menu.salesfunnel',
+      label: 'menu.salespipelines',
       icon: 'pi pi-sitemap',
-      route: '/salesfunnel',
+      route: '/salespipelines',
       expanded: false,
       roles: ['SysAdmin', 'Owner', 'Support', 'Manager', 'Consultant'],
       children: []
