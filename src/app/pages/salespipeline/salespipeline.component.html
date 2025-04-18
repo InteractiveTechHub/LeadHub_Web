@@ -1,1 +1,43 @@
-<p>salespipeline works!</p>
+
+<div class="mx-2">
+
+  <!-- The sales pipeline (category) dropdown -->
+  <p-dropdown
+  [options]="pipelines"
+  [(ngModel)]="selectedPipeline"
+  optionLabel="name"
+  placeholder="Selecione o funil"
+  styleClass="mb-3">
+</p-dropdown>
+
+<!-- Kanban -->
+ @if (selectedPipeline) {
+  <div class="kanban-container" cdkDropListGroup>
+    @for(stage of selectedPipeline.stages; track stage.id) {
+      <div class="kanban-column"
+           cdkDropList
+           [cdkDropListData]="stage.leads"
+           (cdkDropListDropped)="drop($event)">
+
+        <div><strong>{{ stage.title }}</strong></div>
+
+        @for(lead of stage.leads; track lead.leadId) {
+          <p-card class="p-1" cdkDrag>
+            <!-- The placeholder space while dragging -->
+            <ng-template cdkDragPlaceholder>
+              <div class="drag-placeholder"></div>
+            </ng-template>
+
+              <!-- The real Card -->
+              <div class="font-bold">{{ lead.leadCard.leadName }}</div>
+              <small class="text-sm text-color-secondary">{{ lead.leadCard.phoneNumber }}</small>
+
+              <div>{{ DateFormat(lead.leadCard.createdAt) }}</div>
+            </p-card>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
+

@@ -1,0 +1,29 @@
+:host {
+  .kanban-container {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+  }
+
+  .kanban-container {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+  }
+
+  .kanban-column {
+    background: #f4f4f5;
+    padding: 1rem;
+    border-radius: 12px;
+    width: 300px;
+    min-height: 400px;
+    flex-shrink: 0;
+  }
+
+  .drag-placeholder {
+    height: 80px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    background-color: transparent;
+  }
+}

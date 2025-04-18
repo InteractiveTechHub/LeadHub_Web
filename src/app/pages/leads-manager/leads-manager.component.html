@@ -6,7 +6,7 @@
       (scrolledIndexChange)="onScroll($event)"
       [style]="{ height: '100%', width: '100%' }"
     >
-      <div *cdkVirtualFor="let item of leadCards" class="my-2 message">
+      <div *cdkVirtualFor="let item of leadCards" class="my-2 message select-none">
         @if (!leadCards.length) {
         <div class="flex justify-content-center align-items-center h-full">
           Não possui leads no momento.
