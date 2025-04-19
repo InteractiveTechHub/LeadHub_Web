@@ -1,4 +1,4 @@
-:host {
+:host ::ng-deep {
   .kanban-container {
     display: flex;
     gap: 1rem;
@@ -8,7 +8,8 @@
   .kanban-container {
     display: flex;
     gap: 1rem;
-    overflow-x: auto;
+    height: 100%;
+    overflow-x: hidden;
   }
 
   .kanban-column {
@@ -26,4 +27,42 @@
     border-radius: 8px;
     background-color: transparent;
   }
+
+  .p-menu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 14.2rem !important;
+    color: #fff;
+
+    .p-menu-start,
+    .p-menu-end {
+      flex-shrink: 0;
+    }
+
+    .p-menu-list {
+      flex: 1;
+      overflow: auto;
+    }
+  }
+
+  .pi {
+    font-size: 12px;
+  }
+
+  --p-menu-background: var(--p-surface-800);
+  --p-menu-item-color: #fff;
+  --p-menu-item-icon-color: #fff;
+  --p-menu-item-focus-background: var(--p-surface-600);
+  --p-menu-item-focus-color: #fff;
+  --p-menu-item-icon-focus-color: #fff;
+
+  --p-button-primary-background: var(--p-surface-950);
+  --p-button-primary-border-color: var(--p-surface-950);
+  --p-button-primary-hover-background: var(--p-surface-900);
+  --p-button-primary-hover-border-color: var(--p-surface-900);
+
+  --p-button-primary-active-background: var(--p-surface-900);
+  --p-button-primary-active-border-color: var(--p-surface-900);
+  --p-button-primary-active-text-color: #ffffff;
 }

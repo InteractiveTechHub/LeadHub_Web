@@ -1,17 +1,19 @@
-.login-container {
+
+:host {
+  .login-container {
     max-width: 400px;
     margin: 100px auto;
   }
-  
+
   .field {
     margin-bottom: 20px;
   }
-  
+
   .error {
     color: red;
     font-size: 0.8em;
   }
-  
+
   .actions {
     text-align: center;
   }
@@ -20,3 +22,4 @@
   p-password {
     width: 100%;
   }
+}

@@ -6,7 +6,7 @@
       (scrolledIndexChange)="onScroll($event)"
       [style]="{ height: '100%', width: '100%' }"
     >
-      <div *cdkVirtualFor="let item of leadCards" class="my-2 message select-none">
+      <div *cdkVirtualFor="let item of leadCards" class="my-2 select-none">
         @if (!leadCards.length) {
         <div class="flex justify-content-center align-items-center h-full">
           Não possui leads no momento.
@@ -33,10 +33,8 @@
             <div>
               @if (item.lastMessage) {
               <p-tag>
-                <div
-                  class="white-space-nowrap overflow-hidden text-overflow-ellipsis mr-2"
-                  style="max-width: 250px"
-                >
+                <div class="white-space-nowrap overflow-hidden text-overflow-ellipsis mr-2"
+                  style="max-width: 250px">
                   {{ item.lastMessage }}
                 </div>
               </p-tag>

@@ -1,43 +1,213 @@
+<div class="flex mr-2 h-full">
+  @if (items.length) {
+  <div class="mr-2">
+    <p-menu [model]="items">
+      <ng-template #start>
+        <div style="color: #fff" class="text-center font-semibold mt-4">
+          Funil de Vendas
+        </div>
+      </ng-template>
+      <ng-template #item let-item>
+        <a pRipple class="flex items-center p-menu-item-link mt-3">
+          <span [class]="item.icon"></span>
+          <span
+            class="ml-2 white-space-nowrap overflow-hidden text-overflow-ellipsis"
+            >{{ item.label }}</span
+          >
+        </a>
+      </ng-template>
 
-<div class="mx-2">
+      <ng-template #end>
+        <div class="mb-5 text-center">
+          <p-button
+            label="Editar Funil"
+            icon="pi pi-plus"
+            [style]="{ width: '96%' }"
+            (onClick)="editSalesPipelines()"
+          />
+        </div>
+      </ng-template>
+    </p-menu>
+  </div>
+  } @if (selectedPipeline) {
+  <div class="w-full">
+    <div class="flex justify-content-between align-items-center mx-4">
+      <h2>
+        {{ selectedPipeline.name }}
+      </h2>
 
-  <!-- The sales pipeline (category) dropdown -->
-  <p-dropdown
-  [options]="pipelines"
-  [(ngModel)]="selectedPipeline"
-  optionLabel="name"
-  placeholder="Selecione o funil"
-  styleClass="mb-3">
-</p-dropdown>
+      <div>
+        <p-button label="Editar Etapas" />
+      </div>
+    </div>
+    <!-- Kanban -->
+    <cdk-virtual-scroll-viewport
+      #scrollViewport
+      itemSize="auto"
+      [style]="{ height: '100%', width: '100%' }"
+    >
+      @if (selectedPipeline) {
+      <div class="kanban-container" cdkDropListGroup>
+        @for(stage of selectedPipeline.stages; track stage.id) {
+        <div
+          class="kanban-column"
+          cdkDropList
+          [cdkDropListData]="stage.leads"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <h3 style="margin: 0">
+            <strong>{{ stage.title }}</strong>
+          </h3>
 
-<!-- Kanban -->
- @if (selectedPipeline) {
-  <div class="kanban-container" cdkDropListGroup>
-    @for(stage of selectedPipeline.stages; track stage.id) {
-      <div class="kanban-column"
-           cdkDropList
-           [cdkDropListData]="stage.leads"
-           (cdkDropListDropped)="drop($event)">
-
-        <div><strong>{{ stage.title }}</strong></div>
-
-        @for(lead of stage.leads; track lead.leadId) {
+          @for(lead of stage.leads; track lead.leadId) {
           <p-card class="p-1" cdkDrag>
             <!-- The placeholder space while dragging -->
             <ng-template cdkDragPlaceholder>
               <div class="drag-placeholder"></div>
             </ng-template>
 
-              <!-- The real Card -->
-              <div class="font-bold">{{ lead.leadCard.leadName }}</div>
-              <small class="text-sm text-color-secondary">{{ lead.leadCard.phoneNumber }}</small>
+            <!-- The real Card -->
+            <div class="font-bold">{{ lead.leadCard.leadName }}</div>
+            <small class="text-sm text-color-secondary">{{
+              lead.leadCard.phoneNumber
+            }}</small>
 
-              <div>{{ DateFormat(lead.leadCard.createdAt) }}</div>
-            </p-card>
+            <div>{{ DateFormat(lead.leadCard.createdAt) }}</div>
+          </p-card>
           }
         </div>
+        }
+      </div>
       }
-    </div>
+    </cdk-virtual-scroll-viewport>
+  </div>
   }
 </div>
 
+<!-- dialog -->
+<p-dialog header="Editar Funil de Vendas"
+  [(visible)]="enablePipeEditing"
+  [modal]="true"
+  [style]="{ width: '60vw' }"
+  [contentStyle]="{ height: '60vh' }">
+
+  <ng-template #content>
+  <p-toolbar styleClass="mb-6">
+    <ng-template #start></ng-template>
+    <ng-template #end>
+        <p-button label="Novo" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+        <!--
+        <p-button severity="danger" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
+        -->
+    </ng-template>
+</p-toolbar>
+
+  <p-table [value]="pipelines" [scrollable]="true" scrollHeight="40vh" dataKey="id" editMode="row" [tableStyle]="{ 'min-width': '50rem'}">
+    <ng-template #header>
+      <tr>
+          <th style="width:80%">
+              Nome
+          </th>
+          <th style="width:20%"></th>
+      </tr>
+  </ng-template>
+
+  <ng-template #body let-pipeline let-editing="editing" let-ri="rowIndex">
+    <tr [pEditableRow]="pipeline">
+      <td>
+        <p-cellEditor>
+          <ng-template #input>
+              <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="pipeline.name" />
+          </ng-template>
+          <ng-template #output>
+              {{ pipeline.name }}
+          </ng-template>
+      </p-cellEditor>
+      </td>
+
+      <td>
+        <div class="flex items-center justify-center gap-2">
+          @if (!editing) {
+            <button
+              pButton
+              pRipple
+              type="button"
+              pInitEditableRow
+              icon="pi pi-pencil"
+              (click)="onRowEditInit(pipeline)"
+              text
+              rounded
+              severity="secondary"></button>
+            }
+
+          @if (editing) {
+            <button
+              pButton
+              pRipple
+              type="button"
+              pSaveEditableRow
+              icon="pi pi-check"
+              (click)="onRowEditSave(pipeline)"
+              text
+              rounded
+              severity="secondary"></button>
+
+            <button
+              pButton
+              pRipple
+              type="button"
+              pCancelEditableRow
+              icon="pi pi-times"
+              (click)="onRowEditCancel(pipeline, ri)"
+              text
+              rounded
+              severity="secondary"></button>
+            }
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  </p-table>
+</ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="enableNewPipelineDialog" [style]="{ width: '450px' }" header="Adicionar Novo Funil" [modal]="true">
+  <ng-template #content>
+    <form [formGroup]="pipeForm">
+      <div class="mt-2" style="flex: 1; min-width: 200px">
+        <p-floatLabel variant="on">
+          <input
+            type="text"
+            id="pipelineName"
+            pInputText
+            formControlName="name"
+            [class]="{
+              'ng-invalid ng-dirty':
+                pipeForm.get('name')?.invalid &&
+                pipeForm.get('name')?.touched
+            }"
+            style="width: 100%"
+          />
+          <label for="pipelineName">Nome do Funil</label>
+        </p-floatLabel>
+
+        <!-- Error messages -->
+        <div>
+          @if (pipeForm.get('name')?.invalid && pipeForm.get('name')?.touched) {
+            <small class="error-field-message">
+              {{ 'Nome do funil é obrigatório' }}
+            </small>
+          }
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" icon="pi pi-times" text (onClick)="hideDialog()" />
+    <p-button label="Salvar" icon="pi pi-check" (onClick)="savePipeline()" />
+  </ng-template>
+</p-dialog>

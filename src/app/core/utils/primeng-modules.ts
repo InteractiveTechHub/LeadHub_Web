@@ -11,11 +11,13 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { MessageModule } from 'primeng/message';
 import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
 import { PickListModule } from 'primeng/picklist';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectModule } from 'primeng/select';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SplitterModule } from 'primeng/splitter';
@@ -43,11 +45,13 @@ export const PRIME_NG_MODULES = [
     InputMaskModule,
     InputTextModule,
     KeyFilterModule,
+    MenuModule,
     MenubarModule,
     MessageModule,
     PanelModule,
     PasswordModule,
     PickListModule,
+    ScrollPanelModule,
     SelectModule,
     SkeletonModule,
     SplitterModule,

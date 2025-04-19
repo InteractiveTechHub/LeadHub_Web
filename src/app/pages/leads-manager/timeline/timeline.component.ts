@@ -3,14 +3,13 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChil
 import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { isSameDay, parseISO } from 'date-fns';
 
-import { MessageText, Timeline } from '@core/models';
+import { Timeline } from '@core/models';
 import { FilterRequest } from '@core/requests';
 import { LeadManagerService, SignalRService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { ChatMessageService } from '@core/services/chat-message.service';
 import { DateFormaterService } from '@core/services/date-formater.service';
 import { MessageSender, MessageStatus, MessageType } from '@core/enums';
-import { WhatsAppTemplateDto } from '@core/Dtos';
 
 @Component({
   selector: 'app-timeline',

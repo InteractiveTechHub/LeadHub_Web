@@ -1,16 +1,20 @@
 import { CdkDragDrop, transferArrayItem, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FormsModule } from '@angular/forms';
+import { ScrollingModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { SalesPipelineRepository } from '@repository/index';
 import { SalesPipeline } from '@core/interfaces';
-import { LeadStage } from '@core/interfaces/LeadStage';
+import { LeadStage } from '@core/interfaces';
 import { DateFormaterService } from '@core/services/date-formater.service';
 import { DatePipe } from '@angular/common';
+import { MenuItem } from 'primeng/api';
+import { FilterRequest } from '@core/requests';
+
 
 @Component({
   selector: 'app-salespipeline',
-  imports: [DragDropModule, ...PRIME_NG_MODULES, FormsModule],
+  imports: [DragDropModule, FormsModule, ScrollingModule, ReactiveFormsModule, ...PRIME_NG_MODULES],
   providers: [DatePipe, DateFormaterService],
   templateUrl: './salespipeline.component.html',
   styleUrl: './salespipeline.component.scss'
@@ -18,7 +22,17 @@ import { DatePipe } from '@angular/common';
 export class SalespipelineComponent implements OnInit {
 
   pipelines!: SalesPipeline[];
+  clonedPipelines: { [s: string]: SalesPipeline } = {};
   selectedPipeline!: SalesPipeline;
+  enablePipeEditing = false;
+
+  items: MenuItem[] = [];
+
+  pipeline = {};
+  enableNewPipelineDialog = false;
+
+  formBuilder: FormBuilder = new FormBuilder();
+  pipeForm: FormGroup = new FormGroup([]);
 
   /**
    *
@@ -28,23 +42,50 @@ export class SalespipelineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pipelineRepository.fetchSalesPepilines().subscribe(r => {
-      this.selectedPipeline = r.model;
+
+    const filterRequest = new FilterRequest();
+    filterRequest.addFilter('CompanyId', 'equals', 'and', 1);
+    filterRequest.addFilter('ConsultantId', 'equals', 'and', 1)
+
+    this.pipelineRepository.fetchSalesPepilineByRequest(filterRequest).subscribe(response => {
+      if(response.responseData.length) {
+        this.buildPipeMenuList(response.responseData);
+
+        const { id } = response.responseData[0];
+        this.pipelines = response.responseData;
+
+        this.fetchSalesPipelineById(id);
+      }
     });
   }
 
-  DateFormat(date: Date) {
+  public DateFormat(date: Date) {
     return this.dateService.getDateLabel(date);
   }
 
-  drop(event: CdkDragDrop<LeadStage[]>) {
-    //if (event.previousContainer === event.container) return;
+  public drop(event: CdkDragDrop<LeadStage[]>) {
+    let targetStageId: number | null = null;
+
+    const sourceStage = this.selectedPipeline.stages.find(
+      stage => stage.leads === event.previousContainer.data
+    );
+
+    const targetStage = this.selectedPipeline.stages.find(
+      stage => stage.leads === event.container.data
+    );
 
     if (event.previousContainer === event.container) {
       // Order within the same column
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+
     } else {
       // Move between the column
+      const movedLead = event.previousContainer.data[event.previousIndex];
+      const newStage = this.selectedPipeline.stages.find(stage => stage.leads === event.container.data);
+
+      movedLead.pipelineStageId = newStage!.id;
+      targetStageId = newStage!.id;
+
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -52,5 +93,113 @@ export class SalespipelineComponent implements OnInit {
         event.currentIndex
       );
     }
+
+    // register the change of the order of target stage;
+    targetStage!.leads.forEach((lead, index) => {
+      lead.position = index;
+    });
+
+    // register the change of the order source
+    if (sourceStage &&  sourceStage !== targetStage && sourceStage.leads.length) {
+      sourceStage.leads.forEach((lead, index) => {
+        lead.position = index;
+      });
+
+      this.updateLeadStage(sourceStage.leads, sourceStage.id);
+    }
+
+    this.updateLeadStage(targetStage!.leads, targetStageId);
+  }
+
+  public editSalesPipelines() {
+    this.enablePipeEditing = !this.enablePipeEditing;
+  }
+
+  onRowEditInit(pipeline: SalesPipeline) {
+    this.clonedPipelines[pipeline.id] = { ...pipeline };
+  }
+
+  public onRowEditSave(pipeline: SalesPipeline) {
+    if (pipeline.id == this.selectedPipeline.id)
+      this.selectedPipeline.name = pipeline.name;
+
+    this.pipelines.forEach(pipe => {
+      if (pipe.id === pipeline.id) {
+        pipe = pipeline;
+      }
+    });
+
+    this.buildPipeMenuList(this.pipelines);
+
+    delete this.clonedPipelines[pipeline.id];
+
+    this.pipelineRepository.updateSalesPepilines([pipeline]).subscribe();
+  }
+
+  public onRowEditCancel(pipeline: SalesPipeline, index: number) {
+    this.pipelines[index] = this.clonedPipelines[pipeline.id];
+    delete this.clonedPipelines[pipeline.id];
+  }
+
+  openNew() {
+    this.pipeline = {};
+    this.buildPipelineForm();
+    //this.submitted = false;
+    this.enableNewPipelineDialog = true;
+  }
+
+  hideDialog = () => this.enableNewPipelineDialog = false;
+
+  savePipeline() {
+    if (this.pipeForm.invalid) {
+      this.pipeForm.markAllAsTouched();
+
+      return;
+    }
+
+    const pipeline: SalesPipeline = this.pipeForm.value;
+
+    // TODO: Recover user logged or maybe its possible to address to all consultants or one especific consultant
+    // but just the manager could do it.
+    pipeline.companyId = 1;
+    pipeline.consultantId = 1;
+
+    this.pipelineRepository.createSalesPepilineByRequest(pipeline).subscribe(response => {
+      if (response.model) {
+        this.pipelines.push(response.model);
+
+        this.buildPipeMenuList(this.pipelines);
+
+        this.enableNewPipelineDialog = false;
+      }
+    });
+  }
+
+  private buildPipelineForm() {
+    this.pipeForm = this.formBuilder.group({
+      name: ['', Validators.required]
+    });
+  }
+
+  private buildPipeMenuList(pipelines: SalesPipeline[]) {
+    this.items = [];
+
+    pipelines.forEach((pipe) => {
+      this.items.push({
+        label: pipe.name,
+        icon: 'pi pi-filter',
+        command: () => this.fetchSalesPipelineById(pipe.id)
+      });
+    })
+  }
+
+  private fetchSalesPipelineById(id: number) {
+    this.pipelineRepository.fetchSalesPepilineById(id).subscribe(r => {
+      this.selectedPipeline = r.model;
+    });
+  }
+
+  private updateLeadStage(leadStage: LeadStage[], stageId: number | null) {
+    this.pipelineRepository.updateLeadStage(leadStage, stageId).subscribe();
   }
 }
