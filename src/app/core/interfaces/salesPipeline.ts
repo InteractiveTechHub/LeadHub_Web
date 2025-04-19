@@ -5,5 +5,6 @@ export interface SalesPipeline {
   companyId: number;
   consultantId: number;
   name: string;
+  position: number;
   stages: PipelineStage[];
 }

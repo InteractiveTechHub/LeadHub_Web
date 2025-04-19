@@ -37,7 +37,7 @@
       </h2>
 
       <div>
-        <p-button label="Editar Etapas" />
+        <p-button label="Editar Etapas" (onClick)="openEditStage()" />
       </div>
     </div>
     <!-- Kanban -->
@@ -84,9 +84,10 @@
   }
 </div>
 
-<!-- dialog -->
+<!-- TODO: Remove Dialog from here -->
+<!-- dialog edit pipelines -->
 <p-dialog header="Editar Funil de Vendas"
-  [(visible)]="enablePipeEditing"
+  [(visible)]="openPipeEdit"
   [modal]="true"
   [style]="{ width: '60vw' }"
   [contentStyle]="{ height: '60vh' }">
@@ -95,7 +96,7 @@
   <p-toolbar styleClass="mb-6">
     <ng-template #start></ng-template>
     <ng-template #end>
-        <p-button label="Novo" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
+        <p-button label="Novo" icon="pi pi-plus" class="mr-2" (onClick)="openDialogNewPipeline()" />
         <!--
         <p-button severity="danger" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
         -->
@@ -209,5 +210,107 @@
   <ng-template #footer>
     <p-button label="Cancelar" icon="pi pi-times" text (onClick)="hideDialog()" />
     <p-button label="Salvar" icon="pi pi-check" (onClick)="savePipeline()" />
+  </ng-template>
+</p-dialog>
+
+
+<!-- TODO Create a component to the dialog -->
+
+<!-- Editing Pipelines Stage -->
+<p-dialog [(visible)]="openStageEdit" [style]="{ width: '60vw', height: '80vh' }" header="Editar Etapas" [modal]="true">
+  <p-toolbar styleClass="mb-6">
+    <ng-template #start></ng-template>
+    <ng-template #end>
+        <p-button label="Novo" icon="pi pi-plus" class="mr-2" (onClick)="openDialogNewStage()" />
+        <!--
+        <p-button severity="danger" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
+        -->
+    </ng-template>
+  </p-toolbar>
+
+  <ng-template #content>
+    <p-table [value]="selectedPipeline.stages" [scrollable]="true" scrollHeight="60vh" dataKey="id" editMode="row" [tableStyle]="{ 'min-width': '50rem'}">
+      <ng-template #header>
+        <tr>
+            <th style="width:60%">
+                Título
+            </th>
+            <th style="width:20%">
+              Ordem
+          </th>
+            <th style="width:20%"></th>
+        </tr>
+    </ng-template>
+
+      <ng-template #body let-pipeStage let-editing="editing" let-ri="rowIndex">
+        <tr [pEditableRow]="pipeStage">
+          <td>
+            <p-cellEditor>
+              <ng-template #input>
+                  <input
+                      pInputText
+                      type="text"
+                      [(ngModel)]="pipeStage.title" />
+              </ng-template>
+              <ng-template #output>
+                  {{ pipeStage.title }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td>
+            <p-cellEditor>
+              <ng-template #input>
+                  <input
+                      pInputText
+                      type="text"
+                      [(ngModel)]="pipeStage.position" />
+              </ng-template>
+              <ng-template #output>
+                  {{ pipeStage.position }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td>
+            <div class="flex items-center justify-center gap-2">
+              @if (!editing) {
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  pInitEditableRow
+                  icon="pi pi-pencil"
+                  text
+                  rounded
+                  (click)="onRowEditStageInit(pipeStage)"
+                  severity="secondary"></button>
+                }
+
+              @if (editing) {
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  pSaveEditableRow
+                  icon="pi pi-check"
+                  text
+                  rounded
+                  severity="secondary"
+                  (click)="onRowEditStageSave(pipeStage)"></button>
+
+                <button
+                  pButton
+                  pRipple
+                  type="button"
+                  pCancelEditableRow
+                  icon="pi pi-times"
+                  text
+                  rounded
+                  severity="secondary"
+                  (click)="onRowEditStageCancel(pipeStage, ri)"></button>
+                }
+            </div>
+          </td>
+      </ng-template>
+    </p-table>
   </ng-template>
 </p-dialog>

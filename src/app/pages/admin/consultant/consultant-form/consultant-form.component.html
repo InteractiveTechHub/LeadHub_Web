@@ -1,7 +1,7 @@
 <p-panel
   header="Cadastro Usuário"
   class="company"
-  styleClass="w-8"
+  styleClass="w-8 overflow-auto"
   [style]="{ maxWidth: '90%', margin: 'auto auto', height: '100%' }"
 >
   <form [formGroup]="consultantForm" (ngSubmit)="submitAsync()" style="display: flex; flex-direction: column; gap: 1rem; padding-top: 10px">

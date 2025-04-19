@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Component, OnInit } from '@angular/core';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { SalesPipelineRepository } from '@repository/index';
-import { SalesPipeline } from '@core/interfaces';
+import { PipelineStage, SalesPipeline } from '@core/interfaces';
 import { LeadStage } from '@core/interfaces';
 import { DateFormaterService } from '@core/services/date-formater.service';
 import { DatePipe } from '@angular/common';
@@ -22,9 +22,14 @@ import { FilterRequest } from '@core/requests';
 export class SalespipelineComponent implements OnInit {
 
   pipelines!: SalesPipeline[];
-  clonedPipelines: { [s: string]: SalesPipeline } = {};
   selectedPipeline!: SalesPipeline;
-  enablePipeEditing = false;
+  clonedPipelines: { [s: string]: SalesPipeline } = {};
+  openPipeEdit = false;
+
+  pipelineStages!: PipelineStage[];
+  clonedPipelineStage: { [s: string]: PipelineStage } = {};
+  openStageEdit = false;
+  openAddStageDialog = false;
 
   items: MenuItem[] = [];
 
@@ -42,7 +47,7 @@ export class SalespipelineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    //TODO: If consultant, should display only his/her pipelines
     const filterRequest = new FilterRequest();
     filterRequest.addFilter('CompanyId', 'equals', 'and', 1);
     filterRequest.addFilter('ConsultantId', 'equals', 'and', 1)
@@ -59,6 +64,7 @@ export class SalespipelineComponent implements OnInit {
     });
   }
 
+  //#region Pipeline stages
   public DateFormat(date: Date) {
     return this.dateService.getDateLabel(date);
   }
@@ -111,10 +117,37 @@ export class SalespipelineComponent implements OnInit {
     this.updateLeadStage(targetStage!.leads, targetStageId);
   }
 
-  public editSalesPipelines() {
-    this.enablePipeEditing = !this.enablePipeEditing;
+  private updateLeadStage(leadStage: LeadStage[], stageId: number | null) {
+    this.pipelineRepository.updateLeadStage(leadStage, stageId).subscribe();
+  }
+  //#endregion
+
+  //#region Pipelines (menu)
+  private buildPipeMenuList(pipelines: SalesPipeline[]) {
+    this.items = [];
+
+    pipelines.forEach((pipe) => {
+      this.items.push({
+        label: pipe.name,
+        icon: 'pi pi-filter',
+        command: () => this.fetchSalesPipelineById(pipe.id)
+      });
+    })
   }
 
+  private fetchSalesPipelineById(id: number) {
+    this.pipelineRepository.fetchSalesPepilineById(id).subscribe(r => {
+      this.selectedPipeline = r.model;
+    });
+  }
+  //#endregion
+
+  public editSalesPipelines() {
+    this.openPipeEdit = !this.openPipeEdit;
+  }
+
+//TODO: Creates a component for this dialogs
+  //#region Dialogs
   onRowEditInit(pipeline: SalesPipeline) {
     this.clonedPipelines[pipeline.id] = { ...pipeline };
   }
@@ -141,16 +174,15 @@ export class SalespipelineComponent implements OnInit {
     delete this.clonedPipelines[pipeline.id];
   }
 
-  openNew() {
+  public openDialogNewPipeline() {
     this.pipeline = {};
     this.buildPipelineForm();
-    //this.submitted = false;
     this.enableNewPipelineDialog = true;
   }
 
-  hideDialog = () => this.enableNewPipelineDialog = false;
+  public hideDialog = () => this.enableNewPipelineDialog = false;
 
-  savePipeline() {
+  public savePipeline() {
     if (this.pipeForm.invalid) {
       this.pipeForm.markAllAsTouched();
 
@@ -180,26 +212,36 @@ export class SalespipelineComponent implements OnInit {
       name: ['', Validators.required]
     });
   }
+  //#endregion
 
-  private buildPipeMenuList(pipelines: SalesPipeline[]) {
-    this.items = [];
-
-    pipelines.forEach((pipe) => {
-      this.items.push({
-        label: pipe.name,
-        icon: 'pi pi-filter',
-        command: () => this.fetchSalesPipelineById(pipe.id)
-      });
-    })
+  //#region Edit Pipeline Stages
+  public openDialogNewStage() {
+    this.pipeline = {};
+    //this.buildPipelineForm();
+    this.openAddStageDialog = true;
   }
 
-  private fetchSalesPipelineById(id: number) {
-    this.pipelineRepository.fetchSalesPepilineById(id).subscribe(r => {
-      this.selectedPipeline = r.model;
-    });
+  public openEditStage() {
+    this.openStageEdit = !this.openStageEdit;
   }
 
-  private updateLeadStage(leadStage: LeadStage[], stageId: number | null) {
-    this.pipelineRepository.updateLeadStage(leadStage, stageId).subscribe();
+  public onRowEditStageInit(stage: PipelineStage) {
+    this.clonedPipelineStage[stage.id] = { ...stage };
   }
+
+  public onRowEditStageSave(stage: PipelineStage) {
+    delete this.clonedPipelineStage[stage.id];
+
+    const index = this.selectedPipeline.stages.findIndex(s => s.id === stage.id);
+    if (index !== -1) {
+      this.selectedPipeline.stages[index] = { ...stage };
+    }
+  }
+
+  public onRowEditStageCancel(stage: PipelineStage, index: number) {
+    this.pipelineStages[index] = this.clonedPipelineStage[stage.id];
+    delete this.clonedPipelineStage[stage.id];
+  }
+  //#endregion
+
 }
