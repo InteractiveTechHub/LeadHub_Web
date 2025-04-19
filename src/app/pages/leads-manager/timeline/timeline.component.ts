@@ -72,7 +72,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
 
       this.signalReService.joinLeadChat(this.leadIdentifier);
 
-      //this.loadMessages();
+      this.loadMessages();
     }
   }
 

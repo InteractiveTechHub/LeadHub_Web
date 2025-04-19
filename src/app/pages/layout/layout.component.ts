@@ -42,7 +42,7 @@ export class LayoutComponent implements OnInit {
     },
     {
       label: 'menu.salespipelines',
-      icon: 'pi pi-sitemap',
+      icon: 'pi pi-filter',
       route: '/salespipelines',
       expanded: false,
       roles: ['SysAdmin', 'Owner', 'Support', 'Manager', 'Consultant'],
