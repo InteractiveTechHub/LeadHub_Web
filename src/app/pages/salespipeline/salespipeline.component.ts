@@ -49,8 +49,6 @@ export class SalespipelineComponent implements OnInit {
   ngOnInit(): void {
     //TODO: If consultant, should display only his/her pipelines
     const filterRequest = new FilterRequest();
-    filterRequest.addFilter('CompanyId', 'equals', 'and', 1);
-    filterRequest.addFilter('ConsultantId', 'equals', 'and', 1)
 
     this.pipelineRepository.fetchSalesPepilineByRequest(filterRequest).subscribe(response => {
       if(response.responseData.length) {
