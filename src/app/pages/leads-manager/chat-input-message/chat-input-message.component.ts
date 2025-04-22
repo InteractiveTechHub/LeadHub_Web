@@ -1,16 +1,15 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, input, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ChatMessageService } from '@core/services/chat-message.service';
-import { PRIME_NG_MODULES } from '@core/utils';
-
 import { Popover } from 'primeng/popover';
 import { PopoverModule } from 'primeng/popover';
 
 import 'emoji-picker-element';
 import { polyfillCountryFlagEmojis } from 'country-flag-emoji-polyfill';
 import { TemplatesPerType, WhatsAppTemplateDto } from '@core/Dtos';
+import { ChatMessageService } from '@core/services';
+import { PRIME_NG_MODULES } from '@core/utils';
 import { MessageText, Timeline } from '@core/models';
-import { MessageSender, MessageStatus, MessageType } from '@core/enums';
+import { MessageType } from '@core/enums';
 
 @Component({
   selector: 'app-chat-input-message',
@@ -20,7 +19,7 @@ import { MessageSender, MessageStatus, MessageType } from '@core/enums';
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ChatInputMessageComponent implements OnInit {
-  @Input() templates!: Array<TemplatesPerType>;
+  @Input() templates?: Array<TemplatesPerType>;
 
   @ViewChild('emojiPopover') emojiPopover!: Popover;
   @ViewChild('filePopover') filePopover!: Popover;
@@ -36,11 +35,11 @@ export class ChatInputMessageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.buildForm();
-
     this.chatService.chatMessageToolBox$.subscribe(isNotDisabled => {
       this.canSendMessage = isNotDisabled;
     });
+
+    this.buildForm();
   }
 
   public handleEnterKeyEvent(event: any) : void {
@@ -129,8 +128,10 @@ export class ChatInputMessageComponent implements OnInit {
   }
 
   private buildForm() {
+    const templateWarn = this.canSendMessage ? 'Atenção! Evie um template para continuar a conversa.' : '';
+
     this.chatForm = this.form.group({
-      message: ['', [Validators.required, Validators.minLength(1)]]
+      message: [templateWarn, [Validators.required, Validators.minLength(1)]]
     });
   }
 }

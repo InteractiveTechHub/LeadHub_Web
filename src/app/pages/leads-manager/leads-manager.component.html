@@ -1,11 +1,13 @@
 <div class="flex h-full overflow-hidden">
   <div class="flex col h-full shadow-7" style="padding: 0; min-width: 500px">
+
+    <!-- Cards List -->
     <cdk-virtual-scroll-viewport
       #scrollViewport
       itemSize="98"
       (scrolledIndexChange)="onScroll($event)"
-      [style]="{ height: '100%', width: '100%' }"
-    >
+      [style]="{ height: '100%', width: '100%' }">
+
       <div *cdkVirtualFor="let item of leadCards" class="my-2 select-none">
         @if (!leadCards.length) {
         <div class="flex justify-content-center align-items-center h-full">
@@ -13,35 +15,54 @@
         </div>
         }
 
-        <p-card
-          styleClass="mx-2 lead-card"
-          [style]="getCardStyles(item)"
-          (click)="selectLead(item)"
-        >
-          <div class="flex justify-content-between">
-            <strong class="lead-name-text">{{ item.leadName }}</strong>
-            <div>{{ DateFormat(item.createdAt) }}</div>
-          </div>
-
-          @if (item.consultantName) {
-          <div>Consultor: {{ item.consultantName }}</div>
-          } @else {
-          <div>Sem consultor</div>
-          }
-
-          <div class="flex justify-content-between mt-2">
-            <div>
-              @if (item.lastMessage) {
-              <p-tag>
-                <div class="white-space-nowrap overflow-hidden text-overflow-ellipsis mr-2"
-                  style="max-width: 250px">
-                  {{ item.lastMessage }}
-                </div>
-              </p-tag>
-              }
+        <p-card styleClass="mx-2 lead-card" [style]="getCardStyles(item)" (click)="selectLead(item)">
+            <!-- container -->
+           <div class="grid grid-nogutter">
+            <div class="col-9">
+              <div class="text font-bold text-primary">{{ item.leadName }}</div>
             </div>
-            <div>{{ DateFormatMessage(item.lastMessageDate) }}</div>
-          </div>
+            <div class="col-3 text-right">
+              <!--
+              <span class="text-sm px-2 py-1 border-round bg-orange-100 text-orange-800">Fechado</span>
+              -->
+              <p-tag [value]="leadPhaseMetadata[item.phase].label" [severity]="leadPhaseMetadata[item.phase].severity" [rounded]="true"/>
+            </div>
+
+            <div class="col-12 text-sm text-500">
+              <i class="pi pi-user mr-2"></i>{{ item.consultantName }}
+            </div>
+
+            <div class="col-9">
+              <span class="text-sm text-500 white-space-nowrap overflow-hidden text-overflow-ellipsis" style="max-width: 250px">
+                <i class="pi pi-box mr-2"></i>Celular Samsung A54
+              </span>
+            </div>
+            <div class="col-3 text-right">
+              <span class="text-sm text-500">R$ 2.499,00</span>
+            </div>
+
+            <div class="col-9 mt-2">
+              @if (item.lastMessage) {
+                <p-tag>
+                  <div class="white-space-nowrap overflow-hidden text-overflow-ellipsis text-sm mr-2" style="max-width: 250px">
+                    {{ item.lastMessage }}
+                  </div>
+                </p-tag>
+                }
+            </div>
+            <div class="col-3 text-right">
+              <div class="text-sm text-400 mt-2">
+                {{ DateFormatMessage(item.lastMessageDate) }}
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="text-xs text-500 mt-1">
+                Criado em: {{ DateFormat(item.createdAt) }}
+              </div>
+            </div>
+
+           </div>
         </p-card>
       </div>
     </cdk-virtual-scroll-viewport>
@@ -50,28 +71,21 @@
   <!-- timeline container-->
   <div class="flex flex-column w-full">
     @if (selectedCard) {
-    <p-card>
-      <div>
-        <strong class="lead-name-text">{{ selectedCard.leadName }}</strong>
+      <div style="flex: 1">
+        <app-timeline
+          [leadId]="selectedCard.leadId!"
+          [leadIdentifier]="selectedCard.identifier!"></app-timeline>
       </div>
-      <div>
-        {{ selectedCard.phoneNumber }}
-      </div>
-      <div>
-        {{ selectedCard.email }}
-      </div>
-    </p-card>
 
-    <div style="flex: 1">
-      <app-timeline
-        [leadId]="selectedCard.leadId!"
-        [leadIdentifier]="selectedCard.identifier!"
-      ></app-timeline>
-    </div>
-
-    <div style="margin-top: auto">
-      <app-chat-input-message [templates]="templates"/>
-    </div>
+      <div style="margin-top: auto">
+        <app-chat-input-message [templates]="templates"/>
+      </div>
     }
   </div>
+
+  @if (selectedCard) {
+    <div class="flex flex-column col-2 bg-white shadow-7 align-items-center">
+      <app-lead-details [selectedCard]="selectedCard" />
+    </div>
+  }
 </div>

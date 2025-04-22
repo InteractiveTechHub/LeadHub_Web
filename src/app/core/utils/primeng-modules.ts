@@ -1,6 +1,9 @@
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+import { ChipModule } from 'primeng/chip';
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
@@ -17,9 +20,11 @@ import { MessageModule } from 'primeng/message';
 import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
 import { PickListModule } from 'primeng/picklist';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectModule } from 'primeng/select';
 import { SkeletonModule } from 'primeng/skeleton';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { SplitterModule } from 'primeng/splitter';
 import { TableModule } from 'primeng/table';
 import { TabsModule } from 'primeng/tabs';
@@ -32,9 +37,12 @@ import { TooltipModule } from 'primeng/tooltip';
 
 
 export const PRIME_NG_MODULES = [
+    AvatarModule,
+    AvatarGroupModule,
     ButtonModule,
     CalendarModule,
     CardModule,
+    ChipModule,
     DataViewModule,
     DialogModule,
     DividerModule,
@@ -51,10 +59,12 @@ export const PRIME_NG_MODULES = [
     PanelModule,
     PasswordModule,
     PickListModule,
+    RadioButtonModule,
     ScrollPanelModule,
     SelectModule,
     SkeletonModule,
     SplitterModule,
+    SplitButtonModule,
     TableModule,
     TabsModule,
     TagModule,

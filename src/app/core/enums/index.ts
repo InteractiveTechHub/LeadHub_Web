@@ -1,5 +1,7 @@
 export * from './filterConnectorEnum';
 export * from './filterOperatorEnum';
+export * from './leadPhase';
+export * from './leadStatus';
 export * from './integrationType'
 export * from './messageType';
 export * from './messageStatus';

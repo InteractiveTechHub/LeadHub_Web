@@ -1,18 +1,16 @@
-
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
-import { ChatMessageService } from '@core/services/chat-message.service';
+import { TemplatesPerType } from '@core/Dtos';
+import { LeadPhaseMetadata } from '@core/enums';
 import { LeadCard } from '@core/models';
 import { FilterRequest } from '@core/requests';
-import { LeadManagerService, SignalRService } from '@core/services';
+import { LeadManagerService, SignalRService, ChatMessageService, DateFormaterService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 
-import { TimelineComponent } from "./timeline/timeline.component";
-import { ChatInputMessageComponent } from "./chat-input-message/chat-input-message.component";
-import { DateFormaterService } from '@core/services/date-formater.service';
-import { TemplatesPerType } from '@core/Dtos';
+import { LeadDetailsComponent, TimelineComponent, ChatInputMessageComponent } from "./index";
+
 
 
 @Component({
@@ -20,7 +18,7 @@ import { TemplatesPerType } from '@core/Dtos';
   imports: [...PRIME_NG_MODULES,
     TimelineComponent,
     ChatInputMessageComponent,
-    ScrollingModule],
+    ScrollingModule, LeadDetailsComponent],
   providers: [DatePipe, DateFormaterService],
   templateUrl: './leads-manager.component.html',
   styleUrl: './leads-manager.component.scss',
@@ -32,6 +30,9 @@ export class LeadsManagerComponent implements OnInit {
   templates!: TemplatesPerType[];
 
   isLoading: boolean = false;
+  color = "primary"
+
+  leadPhaseMetadata = LeadPhaseMetadata;
 
   constructor(public managerService: LeadManagerService,
     private chatService: ChatMessageService,
@@ -67,7 +68,7 @@ export class LeadsManagerComponent implements OnInit {
     const isSelected = item.leadId === this.selectedCard?.leadId;
 
     return {
-      height: '100px',
+      //height: '100px',
       border: isSelected ? '2px solid #007bff' : 'none',
       transform: isSelected ? 'scale(1.02)' : 'none',
       backgroundColor: isSelected ? '#e7f0ff' : '#fff',

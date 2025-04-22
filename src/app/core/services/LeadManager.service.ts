@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Timeline } from '@core/models';
+import { LeadCard, Timeline } from '@core/models';
 import { FilterRequest } from '@core/requests';
 import { WhatsAppTemplateResponseDto } from '@core/responses';
 import { TimelineResponse } from '@core/responses/timelineResponse';
@@ -14,6 +14,10 @@ export class LeadManagerService {
   private baseUrl = `${environment.apiUrl}/${environment.apiVersion}`;
 
   constructor(private httpClient: HttpClient) { }
+
+  closeLead(leadCard: LeadCard) : Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/leadmanager/close-lead`, leadCard);
+  }
 
   fetchLeadManagerCardsByRequest(filterRequest: FilterRequest) : Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}/leadmanager/leadCards`, filterRequest);

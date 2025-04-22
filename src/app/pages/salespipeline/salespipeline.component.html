@@ -40,37 +40,36 @@
         <p-button label="Editar Etapas" (onClick)="openEditStage()" />
       </div>
     </div>
+
     <!-- Kanban -->
     <cdk-virtual-scroll-viewport
       #scrollViewport
       itemSize="auto"
-      [style]="{ height: '100%', width: '100%' }"
-    >
+      [style]="{ height: '100%', width: '100%' }">
+
       @if (selectedPipeline) {
-      <div class="kanban-container" cdkDropListGroup>
-        @for(stage of selectedPipeline.stages; track stage.id) {
-        <div
-          class="kanban-column"
-          cdkDropList
-          [cdkDropListData]="stage.leads"
-          (cdkDropListDropped)="drop($event)"
-        >
-          <h3 style="margin: 0">
-            <strong>{{ stage.title }}</strong>
-          </h3>
+        <div class="kanban-container" cdkDropListGroup>
+          @for(stage of selectedPipeline.stages; track stage.id) {
+            <div
+              class="kanban-column"
+              cdkDropList
+              [cdkDropListData]="stage.leads"
+              (cdkDropListDropped)="drop($event)">
+
+              <h3 style="margin: 0">
+                <strong>{{ stage.title }}</strong>
+              </h3>
 
           @for(lead of stage.leads; track lead.leadId) {
-          <p-card class="p-1" cdkDrag>
-            <!-- The placeholder space while dragging -->
-            <ng-template cdkDragPlaceholder>
-              <div class="drag-placeholder"></div>
+            <p-card class="p-1" styleClass="cursor-pointer" cdkDrag>
+              <!-- The placeholder space while dragging -->
+              <ng-template cdkDragPlaceholder>
+                <div class="drag-placeholder"></div>
             </ng-template>
 
             <!-- The real Card -->
             <div class="font-bold">{{ lead.leadCard.leadName }}</div>
-            <small class="text-sm text-color-secondary">{{
-              lead.leadCard.phoneNumber
-            }}</small>
+            <small class="text-sm text-color-secondary">{{ lead.leadCard.phoneNumber }}</small>
 
             <div>{{ DateFormat(lead.leadCard.createdAt) }}</div>
           </p-card>
