@@ -11,14 +11,19 @@ import { PRIME_NG_MODULES } from '@core/utils';
 
 import { LeadDetailsComponent, TimelineComponent, ChatInputMessageComponent } from "./index";
 import { MenuItem } from 'primeng/api';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 
 @Component({
   selector: 'app-leads-manager',
   imports: [...PRIME_NG_MODULES,
     TimelineComponent,
+    ScrollingModule,
+    ReactiveFormsModule,
     ChatInputMessageComponent,
-    ScrollingModule, LeadDetailsComponent],
+    TimelineComponent,
+    LeadDetailsComponent],
   providers: [DatePipe, DateFormaterService],
   templateUrl: './leads-manager.component.html',
   styleUrl: './leads-manager.component.scss',
@@ -30,6 +35,8 @@ export class LeadsManagerComponent implements OnInit {
   templates!: TemplatesPerType[];
 
   isLoading: boolean = false;
+
+  filtroControl = new FormControl('');
 
   leadPhaseMetadata = LeadPhaseMetadata;
   managerFilterRequest = new ManagerFilterRequest();
@@ -99,6 +106,17 @@ export class LeadsManagerComponent implements OnInit {
     this.chatService.leadCard$.subscribe(() => {
       this.loadLeadCardList();
     });
+
+    this.filtroControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        console.log(value)
+        this.managerFilterRequest.globalFilter = value ?? "";
+        this.loadLeadCardList();
+      });
   }
 
   DateFormat(data: Date) {
