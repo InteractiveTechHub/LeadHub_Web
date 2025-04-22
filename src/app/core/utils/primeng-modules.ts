@@ -3,6 +3,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+import { CheckboxModule } from 'primeng/checkbox';
 import { ChipModule } from 'primeng/chip';
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
@@ -42,6 +43,7 @@ export const PRIME_NG_MODULES = [
     ButtonModule,
     CalendarModule,
     CardModule,
+    CheckboxModule,
     ChipModule,
     DataViewModule,
     DialogModule,

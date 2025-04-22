@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LeadCard, Timeline } from '@core/models';
-import { FilterRequest } from '@core/requests';
+import { FilterRequest, ManagerFilterRequest } from '@core/requests';
 import { WhatsAppTemplateResponseDto } from '@core/responses';
 import { TimelineResponse } from '@core/responses/timelineResponse';
 import { environment } from '@environment/environment';
@@ -19,8 +19,8 @@ export class LeadManagerService {
     return this.httpClient.post<any>(`${this.baseUrl}/leadmanager/close-lead`, leadCard);
   }
 
-  fetchLeadManagerCardsByRequest(filterRequest: FilterRequest) : Observable<any> {
-    return this.httpClient.post<any>(`${this.baseUrl}/leadmanager/leadCards`, filterRequest);
+  fetchLeadManagerCardsByRequest(managerFilter: ManagerFilterRequest) : Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/leadmanager/leadCards`, managerFilter);
   }
 
   fetchLeadManagerTimelineByRequest(timelineId: number, filterRequest: FilterRequest) : Observable<TimelineResponse> {

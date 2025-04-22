@@ -14,7 +14,7 @@ export class LeadCard {
   leadName?: string;
   phoneNumber?: string;
   email?: string;
-  SaleNote?: string;
+  saleNote?: string;
   status?: LeadStatus;
   timelineId?: number;
 }

@@ -1,5 +1,18 @@
 <div class="flex h-full overflow-hidden">
-  <div class="flex col h-full shadow-7" style="padding: 0; min-width: 500px">
+  <div class="flex flex-column col h-full shadow-7" style="padding: 0; min-width: 500px">
+
+    <p-toolbar>
+      <ng-template #start>
+
+      </ng-template>
+      <ng-template #end>
+        <div>
+          <p-menu #menu [model]="items" [popup]="true" />
+          <p-button [label]="sortSelectedText" (click)="menu.toggle($event)" icon="pi pi-sort-alt" size="small" />
+        </div>
+
+      </ng-template>
+    </p-toolbar>
 
     <!-- Cards List -->
     <cdk-virtual-scroll-viewport

@@ -36,6 +36,8 @@ export class LeadDetailsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.showCloseLeadOptions = false;
 
+    console.log(this.selectedCard)
+
     this.buildLeadForm();
   }
 
@@ -52,7 +54,7 @@ export class LeadDetailsComponent implements OnInit, OnChanges {
   public onCloseLead() {
     const { status,  note } = this.leadForm.value;
     this.selectedCard.status = status;
-    this.selectedCard.SaleNote = note;
+    this.selectedCard.saleNote = note;
 
     this.leadManagerRepository.closeLead(this.selectedCard).subscribe(response => {
       console.info(response);
@@ -61,7 +63,7 @@ export class LeadDetailsComponent implements OnInit, OnChanges {
 
   public onLeadCloseSelectChanges(event: any) {
     const value = event.value.key;
-    
+
     this.leadForm.get('status')?.setValue(value);
   }
 

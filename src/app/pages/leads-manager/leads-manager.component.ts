@@ -5,12 +5,12 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TemplatesPerType } from '@core/Dtos';
 import { LeadPhaseMetadata } from '@core/enums';
 import { LeadCard } from '@core/models';
-import { FilterRequest } from '@core/requests';
+import { FilterRequest, ManagerFilterRequest } from '@core/requests';
 import { LeadManagerService, SignalRService, ChatMessageService, DateFormaterService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 
 import { LeadDetailsComponent, TimelineComponent, ChatInputMessageComponent } from "./index";
-
+import { MenuItem } from 'primeng/api';
 
 
 @Component({
@@ -30,9 +30,54 @@ export class LeadsManagerComponent implements OnInit {
   templates!: TemplatesPerType[];
 
   isLoading: boolean = false;
-  color = "primary"
 
   leadPhaseMetadata = LeadPhaseMetadata;
+  managerFilterRequest = new ManagerFilterRequest();
+  sortSelectedText = "Leads mais recentes";
+
+  items: MenuItem[] = [
+    {
+      label: 'Ordenar por',
+      items: [
+        {
+          label: 'Interação mais recente',
+          command: () => {
+            this.managerFilterRequest.clearSortFilter();
+            this.managerFilterRequest.isInteractionDesc = true;
+            this.sortSelectedText = 'Interação mais recente';
+            this.loadLeadCardList();
+          }
+        },
+        {
+          label: 'Interação mais antiga',
+          command: () => {
+            this.managerFilterRequest.clearSortFilter();
+            this.managerFilterRequest.isInteractionAsc = true;
+            this.sortSelectedText = 'Interação mais antiga';
+            this.loadLeadCardList();
+          }
+        },
+        {
+          label: 'Leads mais recentes',
+          command: () => {
+            this.managerFilterRequest.clearSortFilter();
+            this.managerFilterRequest.isLeadCreatedAtDesc = true;
+            this.sortSelectedText = 'Leads mais recentes';
+            this.loadLeadCardList();
+          }
+        },
+        {
+          label: 'Lead mais antigos',
+          command: () => {
+            this.managerFilterRequest.clearSortFilter();
+            this.managerFilterRequest.isLeadCreatedAtAsc = true;
+            this.sortSelectedText = 'Lead mais antigos';
+            this.loadLeadCardList();
+          }
+        }
+      ]
+    }
+  ];
 
   constructor(public managerService: LeadManagerService,
     private chatService: ChatMessageService,
@@ -95,7 +140,7 @@ export class LeadsManagerComponent implements OnInit {
     if (this.isLoading) return;
     this.isLoading = true;
 
-    const response = this.managerService.fetchLeadManagerCardsByRequest(this.filterRequest);
+    const response = this.managerService.fetchLeadManagerCardsByRequest(this.managerFilterRequest);
 
     response.subscribe((r: any) => {
       if (r.responseData) {
