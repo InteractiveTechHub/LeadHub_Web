@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { LeadCard, Timeline } from '@core/models';
 import { FilterRequest, ManagerFilterRequest } from '@core/requests';
 import { WhatsAppTemplateResponseDto } from '@core/responses';
-import { TimelineResponse } from '@core/responses/timelineResponse';
+import { TimelineResponse } from '@core/responses';
 import { environment } from '@environment/environment';
 import { Observable } from 'rxjs';
 
