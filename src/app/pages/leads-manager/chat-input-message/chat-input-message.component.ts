@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, input, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Popover } from 'primeng/popover';
 import { PopoverModule } from 'primeng/popover';
@@ -10,16 +10,19 @@ import { ChatMessageService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { MessageText, Timeline } from '@core/models';
 import { MessageType } from '@core/enums';
+import { MenuItem } from 'primeng/api';
+import { FilePreviewDialogComponent } from './file-preview-dialog/file-preview-dialog.component';
 
 @Component({
   selector: 'app-chat-input-message',
-  imports: [...PRIME_NG_MODULES, ReactiveFormsModule, PopoverModule],
+  imports: [...PRIME_NG_MODULES, ReactiveFormsModule, PopoverModule, FilePreviewDialogComponent],
   templateUrl: './chat-input-message.component.html',
   styleUrl: './chat-input-message.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ChatInputMessageComponent implements OnInit {
   @Input() templates?: Array<TemplatesPerType>;
+  @Input() leadId!: number;
 
   @ViewChild('emojiPopover') emojiPopover!: Popover;
   @ViewChild('filePopover') filePopover!: Popover;
@@ -27,6 +30,32 @@ export class ChatInputMessageComponent implements OnInit {
   chatForm!: FormGroup;
   canSendMessage: boolean = false;
   templateDialogVisible: boolean = false;
+
+  showModalUploadFile: boolean = false;
+
+  menuItems: MenuItem[] = [
+    {
+      label: 'Fotos & Vídeos',
+      icon: 'pi pi-image',
+      command: () => this.showModalUploadFile = true
+    },
+    /*{
+      label: 'Camera',
+      icon: 'pi pi-camera',
+      //command: () => this.selectVideo()
+    },*/
+    /*{
+      label: 'Documento',
+      icon: 'pi pi-file',
+      //command: () => this.selectDocument()
+    },*/
+    /*{
+      label: 'Localização',
+      icon: 'pi pi-map-marker',
+      //command: () => this.selectLocation()
+    }*/
+  ];
+
 
   constructor(
     private form: FormBuilder,
@@ -36,7 +65,7 @@ export class ChatInputMessageComponent implements OnInit {
 
   ngOnInit(): void {
     this.chatService.chatMessageToolBox$.subscribe(isNotDisabled => {
-      this.canSendMessage = isNotDisabled;
+      this.canSendMessage = true//isNotDisabled;
     });
 
     this.buildForm();
@@ -47,7 +76,7 @@ export class ChatInputMessageComponent implements OnInit {
     if (!messageControl) return;
 
     const textarea = event.target as HTMLTextAreaElement;
-    const cursorPos = textarea.selectionStart; // Posição atual do cursor
+    const cursorPos = textarea.selectionStart; // cursor position
     const textBefore = messageControl.value.substring(0, cursorPos);
     const textAfter = messageControl.value.substring(cursorPos);
 

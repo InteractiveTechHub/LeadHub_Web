@@ -58,7 +58,24 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
       //update the ui
       this.timelines = [...this.timelines ?? [], timeline];
 
-      this.RegisterTimelineAndSendMessage(timeline);
+      this.SendTextMessage(timeline);
+
+      this.scrollToBottom();
+    });
+
+    this.chatService.filesTosend$.subscribe((files) => {
+      if (!files) return;
+
+      console.log(files)
+
+      const formData = new FormData();
+
+      for (const file of files) {
+        formData.append('files', file, file.name);
+        formData.append('captions', file.caption);
+      }
+
+      this.sendFileMessage(formData, this.leadId);
 
       this.scrollToBottom();
     });
@@ -128,7 +145,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
     return timelines;
   }
 
-  private RegisterTimelineAndSendMessage(timeline: Timeline) {
+  private SendTextMessage(timeline: Timeline) {
     const response = this.leadService.SendMessageToClient(timeline);
 
     response.subscribe(response => {
@@ -143,6 +160,21 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
       this.messageDateDivider(this.timelines!);
 
       this.chatService.updateLeadsCard();
+    });
+  }
+
+  private sendFileMessage(formData: FormData, leadId: number) {
+    const response = this.leadService.sendFiles(formData, leadId);
+
+    response.subscribe(res => {
+
+      console.log(res);
+      // update the message sent by the index
+      //const index = this.timelines.findIndex(msg => msg.message!.body === timeline.message!.body);
+
+      //this.messageDateDivider(this.timelines!);
+
+      //this.chatService.updateLeadsCard();
     });
   }
 

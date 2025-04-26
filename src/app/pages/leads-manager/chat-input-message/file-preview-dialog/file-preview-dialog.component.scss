@@ -1,0 +1,26 @@
+
+:host ::ng-deep {
+  .file-item {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .file-caption {
+    margin-top: 10px;
+  }
+
+  .file-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .card {
+    width: 150px;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+}

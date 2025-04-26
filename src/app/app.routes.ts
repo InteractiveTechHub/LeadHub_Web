@@ -27,6 +27,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/salespipeline/salespipeline.component').then(m => m.SalespipelineComponent)
       },
       {
+        path: 'calendar',
+        loadComponent: () => import('./pages/calendar/calendar.component').then(m => m.CalendarComponent)
+      },
+      {
         path: 'admin/companies',
         loadComponent: () => import('./pages/admin/company/company-list/company-list.component').then(c => c.CompanyListComponent),
         data: { roles: ['SysAdmin'] },

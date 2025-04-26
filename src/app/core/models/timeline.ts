@@ -1,5 +1,6 @@
 import { MessageSender, MessageStatus, MessageType } from "@core/enums";
 import { MessageText } from "./MessageText";
+import { MessagFile } from "@core/interfaces/messageFile";
 
 export class Timeline {
   id: number = 0;
@@ -13,7 +14,7 @@ export class Timeline {
   sender!: MessageSender;
   status!: MessageStatus;
   type!: MessageType;
-  messageFile: any;
+  messageFiles?: MessagFile[];
   messageReaction: any;
   message?: MessageText;
   templateName?: string;

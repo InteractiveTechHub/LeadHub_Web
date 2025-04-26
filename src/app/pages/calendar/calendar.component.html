@@ -1,0 +1,9 @@
+
+@if (calendarVisible()) {
+  <div class="h-full" style="overflow: auto;">
+    <div class="mt-2 mb-4 p-4 border-round calendar-container" style="background-color: #fff; width: 90%; margin: auto">
+      <full-calendar #calendar [options]="calendarOptions()"></full-calendar>
+    </div>
+  </div>
+}
+

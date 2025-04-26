@@ -113,7 +113,6 @@ export class LeadsManagerComponent implements OnInit {
         distinctUntilChanged()
       )
       .subscribe(value => {
-        console.log(value)
         this.managerFilterRequest.globalFilter = value ?? "";
         this.loadLeadCardList();
       });
@@ -134,7 +133,7 @@ export class LeadsManagerComponent implements OnInit {
       //height: '100px',
       border: isSelected ? '2px solid #007bff' : 'none',
       transform: isSelected ? 'scale(1.02)' : 'none',
-      backgroundColor: isSelected ? '#e7f0ff' : '#fff',
+      //backgroundColor: isSelected ? '#e7f0ff' : '#fff',
       boxShadow: isSelected ? '0px 4px 12px rgba(0, 0, 255, 0.3)' : ''
     };
   }

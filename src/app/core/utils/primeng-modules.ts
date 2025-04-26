@@ -1,5 +1,6 @@
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
@@ -10,7 +11,9 @@ import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { FieldsetModule } from 'primeng/fieldset';
+import { FileUploadModule } from 'primeng/fileupload';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { GalleriaModule } from 'primeng/galleria';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,9 +21,11 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { MessageModule } from 'primeng/message';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { PanelModule } from 'primeng/panel';
 import { PasswordModule } from 'primeng/password';
 import { PickListModule } from 'primeng/picklist';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectModule } from 'primeng/select';
@@ -37,9 +42,11 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
 
+
 export const PRIME_NG_MODULES = [
     AvatarModule,
     AvatarGroupModule,
+    BadgeModule,
     ButtonModule,
     CalendarModule,
     CardModule,
@@ -50,7 +57,9 @@ export const PRIME_NG_MODULES = [
     DividerModule,
     DropdownModule,
     FieldsetModule,
+    FileUploadModule,
     FloatLabelModule,
+    GalleriaModule,
     InputGroupModule,
     InputMaskModule,
     InputTextModule,
@@ -58,9 +67,11 @@ export const PRIME_NG_MODULES = [
     MenuModule,
     MenubarModule,
     MessageModule,
+    OverlayBadgeModule,
     PanelModule,
     PasswordModule,
     PickListModule,
+    ProgressBarModule,
     RadioButtonModule,
     ScrollPanelModule,
     SelectModule,

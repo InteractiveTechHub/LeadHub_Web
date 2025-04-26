@@ -4,6 +4,7 @@ import { NgClass } from '@angular/common';
 import { Router, NavigationEnd, RouterLink, RouterOutlet, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '@authentication/services';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-layout',
@@ -51,7 +52,7 @@ export class LayoutComponent implements OnInit {
     {
       label: 'menu.schedule',
       icon: 'pi pi-calendar',
-      route: '/schedule',
+      route: '/calendar',
       expanded: false,
       roles: ['SysAdmin', 'Owner', 'Support', 'Manager', 'Consultant'],
       children: []
@@ -91,6 +92,19 @@ export class LayoutComponent implements OnInit {
           route: '/admin/consultants'
         }
       ]
+    }
+  ];
+
+  userMenuItems: MenuItem[] = [
+    {
+      label: 'Editar Perfil',
+      icon: 'pi pi-user-edit',
+      //command: () => this.onEditProfile()
+    },
+    {
+      label: 'Logout',
+      icon: 'pi pi-sign-out',
+      //command: () => this.onLogout()
     }
   ];
 

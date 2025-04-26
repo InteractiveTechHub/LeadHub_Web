@@ -15,16 +15,13 @@ export class LeadManagerService {
 
   constructor(private httpClient: HttpClient) { }
 
+  // These are lead events
   closeLead(leadCard: LeadCard) : Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}/leadmanager/close-lead`, leadCard);
   }
 
   fetchLeadManagerCardsByRequest(managerFilter: ManagerFilterRequest) : Observable<any> {
     return this.httpClient.post<any>(`${this.baseUrl}/leadmanager/leadCards`, managerFilter);
-  }
-
-  fetchLeadManagerTimelineByRequest(timelineId: number, filterRequest: FilterRequest) : Observable<TimelineResponse> {
-    return this.httpClient.post<TimelineResponse>(`${this.baseUrl}/timeline/${timelineId}`, filterRequest);
   }
 
   fetchTemplatesByLeadId(leadId: number) : Observable<WhatsAppTemplateResponseDto> {
@@ -34,7 +31,16 @@ export class LeadManagerService {
     return this.httpClient.get<WhatsAppTemplateResponseDto>(`${this.baseUrl}/leadmanager/templates`, { params });
   }
 
+  //TODO: These are timeline events
+  fetchLeadManagerTimelineByRequest(timelineId: number, filterRequest: FilterRequest) : Observable<TimelineResponse> {
+    return this.httpClient.post<TimelineResponse>(`${this.baseUrl}/timeline/${timelineId}`, filterRequest);
+  }
+
   SendMessageToClient(timeline: Timeline) : Observable<TimelineResponse> {
-    return this.httpClient.post<TimelineResponse>(`${this.baseUrl}/timeline/register`, timeline);
+    return this.httpClient.post<TimelineResponse>(`${this.baseUrl}/timeline/sendMessage`, timeline);
+  }
+
+  sendFiles(formData: FormData, leadId: number) : Observable<any> {
+    return this.httpClient.post<any>(`${this.baseUrl}/timeline/upload/${leadId}`, formData);
   }
 }

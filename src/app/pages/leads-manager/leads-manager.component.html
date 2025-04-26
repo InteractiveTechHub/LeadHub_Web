@@ -31,7 +31,7 @@
         </div>
         }
 
-        <p-card styleClass="mx-2 lead-card" [style]="getCardStyles(item)" (click)="selectLead(item)">
+        <p-card styleClass="mx-3 lead-card" [style]="getCardStyles(item)" (click)="selectLead(item)">
             <!-- container -->
            <div class="grid grid-nogutter">
             <div class="col-9">
@@ -92,11 +92,13 @@
           [leadId]="selectedCard.leadId!"
           [leadIdentifier]="selectedCard.identifier!"></app-timeline>
       </div>
-
-      <div style="margin-top: auto">
-        <app-chat-input-message [templates]="templates"/>
-      </div>
     }
+
+    <div style="margin-top: auto">
+      <div [style.visibility]="selectedCard ? 'visible' : 'hidden'">
+        <app-chat-input-message [templates]="templates"></app-chat-input-message>
+      </div>
+    </div>
   </div>
 
   @if (selectedCard) {
