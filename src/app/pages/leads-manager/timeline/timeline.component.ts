@@ -5,11 +5,12 @@ import { isSameDay, parseISO } from 'date-fns';
 
 import { Timeline } from '@core/models';
 import { FilterRequest } from '@core/requests';
-import { LeadManagerService, SignalRService } from '@core/services';
+import { SignalRService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { ChatMessageService } from '@core/services/chat-message.service';
 import { DateFormaterService } from '@core/services/date-formater.service';
-import { MessageSender, MessageStatus, MessageType } from '@core/enums';
+import { MessageSender, MessageStatus } from '@core/enums';
+import { LeadManagerRepository } from '@repository/index';
 
 @Component({
   selector: 'app-timeline',
@@ -35,7 +36,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
     private chatService: ChatMessageService,
     private dateService: DateFormaterService,
     private datePipe: DatePipe,
-    private leadService: LeadManagerService,
+    private leadManagerRepository: LeadManagerRepository,
     private signalReService: SignalRService) { }
 
   ngOnDestroy(): void {
@@ -115,7 +116,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoadingTimeline = true;
 
     const filter = new FilterRequest();
-    const response = this.leadService.fetchLeadManagerTimelineByRequest(this.leadId, filter)
+    const response = this.leadManagerRepository.fetchLeadManagerTimelineByRequest(this.leadId, filter)
 
     response.subscribe(r => {
       if (r.responseData.length) {
@@ -146,7 +147,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private SendTextMessage(timeline: Timeline) {
-    const response = this.leadService.SendMessageToClient(timeline);
+    const response = this.leadManagerRepository.SendMessageToClient(timeline);
 
     response.subscribe(response => {
 
@@ -164,7 +165,7 @@ export class TimelineComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private sendFileMessage(formData: FormData, leadId: number) {
-    const response = this.leadService.sendFiles(formData, leadId);
+    const response = this.leadManagerRepository.sendFiles(formData, leadId);
 
     response.subscribe(res => {
 

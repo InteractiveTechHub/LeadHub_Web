@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CompanyService {
+export class CompanyRepository {
 
   private baseUrl = `${environment.apiUrl}/${environment.apiVersion}/company`;
 

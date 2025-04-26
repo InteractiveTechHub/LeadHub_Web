@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 
 import { Company } from '@core/models';
 import { FilterRequest } from '@core/requests/filterRequest';
-import { CompanyService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
+import { CompanyRepository } from '@repository/index';
 
 @Component({
   selector: 'app-company-list',
@@ -21,7 +21,7 @@ export class CompanyListComponent {
   //button control
   activeEditButton: boolean = false;
 
-  constructor(private service: CompanyService,
+  constructor(private repository: CompanyRepository,
     private cdr: ChangeDetectorRef,
     private router: Router) {}
 
@@ -47,7 +47,7 @@ export class CompanyListComponent {
 
     const filterRequest = this.buildFilter(event.filters);
 
-    const response = this.service.fetchCompanyByRequest(filterRequest);
+    const response = this.repository.fetchCompanyByRequest(filterRequest);
 
     response.subscribe(res => {
       this.companies = res.responseData;

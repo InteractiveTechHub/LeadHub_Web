@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Consultant } from '@core/models';
 import { FilterRequest } from '@core/requests';
-import { ConsultantService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
+import { ConsultantRepository } from '@repository/consultant.repository';
 
 
 @Component({
@@ -24,7 +24,7 @@ export class ConsultantListComponent implements OnInit {
   selectedCompanyId!: number;
 
   constructor(
-    private consultantService: ConsultantService,
+    private consultantRepository: ConsultantRepository,
     private cdr: ChangeDetectorRef,
     private router: Router) {}
 
@@ -53,7 +53,7 @@ export class ConsultantListComponent implements OnInit {
     const filterRequest = this.buildFilter(event.filters);
     //filterRequest.addFilter('CompanyId', 'equals', 'and', this.selectedCompanyId);
 
-    const response = this.consultantService.fetchConsultantByRequest(filterRequest);
+    const response = this.consultantRepository.fetchConsultantByRequest(filterRequest);
 
     response.subscribe(res => {
       this.consultants = res.responseData;

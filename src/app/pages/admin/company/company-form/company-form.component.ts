@@ -5,9 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Address, Company } from '@core/models';
 import { FilterRequest } from '@core/requests';
-import { CompanyService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CompanyRepository } from '@repository/index';
 
 @Component({
   selector: 'app-company-form',
@@ -27,7 +27,7 @@ export class CompanyFormComponent implements OnInit {
 
   panelTitle: string = 'Cadastro de Empresa'
 
-  constructor(private route: ActivatedRoute, private service: CompanyService) { }
+  constructor(private route: ActivatedRoute, private companyRepository: CompanyRepository) { }
 
   ngOnInit(): void {
     const companyId = this.route.snapshot.paramMap.get('id');
@@ -61,7 +61,7 @@ export class CompanyFormComponent implements OnInit {
 
   public createCompany(company: Company) {
 
-    const response = this.service.createCompany(company);
+    const response = this.companyRepository.createCompany(company);
 
     response.subscribe(res => {
       this.companyForm.reset();
@@ -71,7 +71,7 @@ export class CompanyFormComponent implements OnInit {
   public searchCompany() {
     const cnpj = this.companyForm.get('companyData.identificationNumber')?.value;
 
-    this.service.fetchCompanyDataByCnpj(cnpj).subscribe(response => {
+    this.companyRepository.fetchCompanyDataByCnpj(cnpj).subscribe(response => {
       if (response.model)
         this.populatesCompanyForm(response.model);
     });
@@ -80,7 +80,7 @@ export class CompanyFormComponent implements OnInit {
   public searchAddressByCEP() {
     const cep = this.companyForm.get('addressData.zipCode')?.value;
 
-    const response = this.service.fetchCompanyAddressByCEP(cep);
+    const response = this.companyRepository.fetchCompanyAddressByCEP(cep);
 
     response.subscribe(resp => {
       if (resp.model) {
@@ -118,7 +118,7 @@ export class CompanyFormComponent implements OnInit {
       //company.address?.companyId = company.id
     }
 
-    this.service.updateCompany(company).subscribe();
+    this.companyRepository.updateCompany(company).subscribe();
   }
 
   /**
@@ -129,7 +129,7 @@ export class CompanyFormComponent implements OnInit {
     const filter = new FilterRequest();
     filter.addFilter('Id', 'equals', 'and', companyId, 'c');
 
-    const response = this.service.fetchCompanyByRequest(filter);
+    const response = this.companyRepository.fetchCompanyByRequest(filter);
 
     response.subscribe(res => {
       const model: Company = res.responseData[0];

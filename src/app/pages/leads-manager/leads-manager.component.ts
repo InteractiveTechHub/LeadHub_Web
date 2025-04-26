@@ -6,13 +6,14 @@ import { TemplatesPerType } from '@core/Dtos';
 import { LeadPhaseMetadata } from '@core/enums';
 import { LeadCard } from '@core/models';
 import { FilterRequest, ManagerFilterRequest } from '@core/requests';
-import { LeadManagerService, SignalRService, ChatMessageService, DateFormaterService } from '@core/services';
+import { SignalRService, ChatMessageService, DateFormaterService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 
 import { LeadDetailsComponent, TimelineComponent, ChatInputMessageComponent } from "./index";
 import { MenuItem } from 'primeng/api';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { LeadManagerRepository } from '@repository/index';
 
 
 @Component({
@@ -86,7 +87,8 @@ export class LeadsManagerComponent implements OnInit {
     }
   ];
 
-  constructor(public managerService: LeadManagerService,
+  constructor(
+    public managerRepository: LeadManagerRepository,
     private chatService: ChatMessageService,
     private dateService: DateFormaterService,
     private signalReService: SignalRService,
@@ -146,7 +148,7 @@ export class LeadsManagerComponent implements OnInit {
   }
 
   selectLead(leadCard: LeadCard) {
-    const response = this.managerService.fetchTemplatesByLeadId(leadCard.leadId!);
+    const response = this.managerRepository.fetchTemplatesByLeadId(leadCard.leadId!);
     response.subscribe(res => {
       this.templates = res.responseData;
       this.selectedCard = leadCard;
@@ -157,7 +159,7 @@ export class LeadsManagerComponent implements OnInit {
     if (this.isLoading) return;
     this.isLoading = true;
 
-    const response = this.managerService.fetchLeadManagerCardsByRequest(this.managerFilterRequest);
+    const response = this.managerRepository.fetchLeadManagerCardsByRequest(this.managerFilterRequest);
 
     response.subscribe((r: any) => {
       if (r.responseData) {

@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LeadManagerService {
+export class LeadManagerRepository {
   private baseUrl = `${environment.apiUrl}/${environment.apiVersion}`;
 
   constructor(private httpClient: HttpClient) { }

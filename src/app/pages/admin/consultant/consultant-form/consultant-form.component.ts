@@ -7,9 +7,10 @@ import { RegisterModel } from '@authentication/models';
 import { AuthService } from '@authentication/services';
 import { Company } from '@core/models';
 import { FilterRequest } from '@core/requests';
-import { CompanyService, ConsultantService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
 import { TranslatePipe } from '@ngx-translate/core';
+import { CompanyRepository } from '@repository/company.repository';
+import { ConsultantRepository } from '@repository/consultant.repository';
 
 
 @Component({
@@ -41,8 +42,8 @@ export class ConsultantFormComponent implements OnInit {
   ];
 
   constructor(
-    private consultantService: ConsultantService,
-    private companyService: CompanyService,
+    private consultantRepository: ConsultantRepository,
+    private companyRepository: CompanyRepository,
     private authService: AuthService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef) {
@@ -147,7 +148,7 @@ export class ConsultantFormComponent implements OnInit {
     const filterRequest = new FilterRequest();
     //filterRequest.addFilter();
 
-    const response = this.companyService.fetchCompanyByRequest(filterRequest);
+    const response = this.companyRepository.fetchCompanyByRequest(filterRequest);
 
     response.subscribe(r => {
       this.sourceCompanies = r.responseData;
@@ -159,7 +160,7 @@ export class ConsultantFormComponent implements OnInit {
     const filter = new FilterRequest();
     filter.addFilter('Id', 'equals', 'and', consultantId, 'u');
 
-    const response = this.consultantService.fetchConsultantByRequest(filter);
+    const response = this.consultantRepository.fetchConsultantByRequest(filter);
 
     response.subscribe(res => {
       const consultantData = res.responseData[0];

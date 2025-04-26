@@ -2,8 +2,8 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LeadStatus } from '@core/enums/leadStatus';
 import { LeadCard } from '@core/models';
-import { LeadManagerService } from '@core/services';
 import { PRIME_NG_MODULES } from '@core/utils';
+import { LeadManagerRepository } from '@repository/index';
 
 @Component({
   selector: 'app-lead-details',
@@ -27,7 +27,7 @@ export class LeadDetailsComponent implements OnInit, OnChanges {
   /**
    *
    */
-  constructor(private leadManagerRepository: LeadManagerService) {
+  constructor(private leadManagerRepository: LeadManagerRepository) {
   }
 
   ngOnInit(): void {
