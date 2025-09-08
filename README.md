@@ -23,6 +23,15 @@ The LeadHub Web frontend depends on the backend API services. Make sure to run t
    - The backend services should be accessible and running
    - Check that the API endpoints are responding
 
+## Login Credentials
+
+To access the application, you can use the following default admin credentials:
+
+- **Email:** sysadmin@admin.com
+- **Password:** SysAdmin#1234
+
+These credentials provide full administrative access to the LeadHub Web application.
+
 ## Running with Docker
 
 ### Development Environment
