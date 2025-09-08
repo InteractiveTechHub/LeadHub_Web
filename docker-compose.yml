@@ -1,6 +1,7 @@
 networks:
   interactive_net:
     external: true
+    name: interactive_net
 
 services:
   leadshub_web:
@@ -8,8 +9,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - BUILD_ENV=${BUILD_ENV:-development}
     expose:
       - 80
     networks:
       interactive_net:
-        ipv4_address: 172.19.0.10
+        ipv4_address: 172.19.0.12
+    environment:
+      - NODE_ENV=development
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.leadshub-web.rule=Host(`${DOMAIN:-localhost}`)
+      - traefik.http.routers.leadshub-web.entrypoints=web
+      - traefik.http.services.leadshub-web.loadbalancer.server.port=80

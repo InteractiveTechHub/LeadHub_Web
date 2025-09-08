@@ -1,9 +1,10 @@
 FROM node:20 AS build
+ARG BUILD_ENV=production
 WORKDIR /app
 COPY package*.json ./
 COPY . .
 RUN npm install
-RUN npm run build --configuration=production
+RUN if [ "$BUILD_ENV" = "development" ]; then npm run build:dev; else npm run build; fi
 
 FROM nginx:stable
 COPY --from=build /app/dist/leadweb/browser /usr/share/nginx/html
