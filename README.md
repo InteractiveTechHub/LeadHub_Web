@@ -16,7 +16,7 @@ docker-compose up --build
 docker-compose up -d --build
 ```
 
-The application will be available at `http://localhost:8080/` (if using docker-compose.web.yml) or through the configured domain.
+The application will be available at `http://localhost:80` (if using docker-compose.web.yml) or through the configured domain.
 
 ### Production Environment
 
@@ -38,6 +38,113 @@ docker build --build-arg BUILD_ENV=development -t leadhub-web:dev .
 # Production build (default)
 docker build --build-arg BUILD_ENV=production -t leadhub-web:prod .
 ```
+
+## Project Architecture
+
+### Overview
+
+LeadHub Web is a modern Angular 19 application built with a modular architecture that follows Angular best practices. The application is designed for lead management and sales pipeline tracking with real-time communication capabilities.
+
+### Technology Stack
+
+- **Frontend Framework**: Angular 19.2.7
+- **UI Library**: PrimeNG 19.1.0 with custom themes
+- **Styling**: SCSS with PrimeFlex 4.0.0
+- **State Management**: RxJS with BehaviorSubjects
+- **Real-time Communication**: SignalR 8.0.7
+- **Internationalization**: ngx-translate 16.0.4
+- **Authentication**: JWT with custom guards
+- **Calendar**: FullCalendar 6.1.17
+- **Date Handling**: date-fns 4.1.0
+
+### Project Structure
+
+```
+src/app/
+├── authentication/          # Authentication module
+│   ├── login/              # Login component
+│   ├── models/             # Auth models (LoginModel, RegisterModel, Token)
+│   ├── services/           # AuthService
+│   └── shared/             # Guards and interceptors
+├── core/                   # Core functionality
+│   ├── Dtos/               # Data Transfer Objects
+│   ├── enums/              # Application enums
+│   ├── interfaces/         # TypeScript interfaces
+│   ├── models/             # Domain models
+│   ├── requests/           # API request models
+│   ├── responses/          # API response models
+│   ├── services/           # Core services (SignalR, Chat, Date)
+│   └── utils/              # Utility functions and PrimeNG modules
+├── pages/                  # Feature pages
+│   ├── admin/              # Admin management pages
+│   ├── calendar/           # Calendar functionality
+│   ├── dashboard/          # Dashboard page
+│   ├── layout/             # Main layout component
+│   ├── leads-manager/      # Lead management
+│   └── salespipeline/      # Sales pipeline management
+└── repository/             # Data access layer
+    ├── channel.repository.ts
+    ├── company.repository.ts
+    ├── consultant.repository.ts
+    ├── LeadManager.repository.ts
+    ├── salesPipeline.repository.ts
+    └── whatsapp.repository.ts
+```
+
+### Architecture Patterns
+
+#### 1. Repository Pattern
+The application uses a repository pattern for data access, providing a clean separation between the data layer and business logic:
+
+- **CompanyRepository**: Manages company data and Brazilian CNPJ/CEP lookups
+- **ConsultantRepository**: Handles consultant management
+- **LeadManagerRepository**: Manages lead operations and timeline events
+- **SalesPipelineRepository**: Handles sales pipeline and stage management
+- **WhatsAppRepository**: Manages WhatsApp integration
+
+#### 2. Service Layer
+Core services provide business logic and cross-cutting concerns:
+
+- **AuthService**: Authentication and authorization
+- **SignalRService**: Real-time communication with SignalR
+- **ChatMessageService**: Message management and state
+- **DateFormaterService**: Date formatting utilities
+
+#### 3. Guard-based Security
+Route protection using Angular guards:
+
+- **authGuard**: Protects authenticated routes
+- **Role-based access**: Different access levels (SysAdmin, Owner, Support, Manager, Consultant)
+
+#### 4. Modular Architecture
+The application is organized into feature modules:
+
+- **Authentication Module**: Complete auth functionality
+- **Core Module**: Shared services and utilities
+- **Pages Module**: Feature-specific components
+- **Repository Module**: Data access layer
+
+### Key Features
+
+#### Real-time Communication
+- **SignalR Integration**: Real-time updates for leads and messages
+- **WebSocket Support**: Automatic reconnection and error handling
+- **Event-driven Architecture**: Reactive updates using RxJS
+
+#### Internationalization
+- **Multi-language Support**: English (en-US) and Portuguese (pt-BR)
+- **Dynamic Language Switching**: Runtime language changes
+- **Localized Components**: PrimeNG components with translations
+
+#### Responsive Design
+- **Mobile-first Approach**: Responsive layout with PrimeFlex
+- **Collapsible Sidebar**: Adaptive navigation
+- **Modern UI Components**: PrimeNG component library
+
+#### Data Management
+- **Filter System**: Advanced filtering with operators and connectors
+- **Pagination**: Efficient data loading
+- **State Management**: Reactive state with RxJS
 
 ## Development server (Local)
 
