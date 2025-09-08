@@ -2,6 +2,25 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.2.
 
+## Prerequisites
+
+Before running this frontend application, you need to start the backend services first.
+
+### Backend Services
+
+The LeadHub Web frontend depends on the backend API services. Make sure to run the backend first:
+
+1. **Clone and run the backend services:**
+   ```bash
+   git clone https://github.com/InteractiveTechHub/LeadsHub_Services.git
+   cd LeadsHub_Services
+   docker-compose up -d
+   ```
+
+2. **Verify backend is running:**
+   - The backend services should be accessible and running
+   - Check that the API endpoints are responding
+
 ## Running with Docker
 
 ### Development Environment
@@ -147,6 +166,8 @@ The application is organized into feature modules:
 - **State Management**: Reactive state with RxJS
 
 ## Development server (Local)
+
+**Important:** Make sure the backend services are running before starting the frontend development server.
 
 To start a local development server without Docker, run:
 
