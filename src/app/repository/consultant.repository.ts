@@ -14,10 +14,20 @@ export class ConsultantRepository {
 
   constructor(private httpClient: HttpClient) { }
 
+  /**
+   * Creates a new consultant
+   * @param consultant - The consultant data to create
+   * @returns Observable with the response
+   */
   createConsultant(consultant: Consultant) {
     return this.httpClient.post(`${this.baseUrl}`, consultant);
   }
 
+  /**
+   * Fetches consultants based on filter criteria
+   * @param filterRequest - Filter criteria for consultants
+   * @returns Observable with consultant response data
+   */
   fetchConsultantByRequest(filterRequest: FilterRequest) : Observable<ConsultantResponse> {
     return this.httpClient.post<ConsultantResponse>(`${this.baseUrl}/fetchall`, filterRequest);
   }

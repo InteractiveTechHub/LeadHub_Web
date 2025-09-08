@@ -40,12 +40,17 @@ export class SalespipelineComponent implements OnInit {
   pipeForm: FormGroup = new FormGroup([]);
 
   /**
-   *
+   * Constructor for the SalespipelineComponent
+   * @param pipelineRepository - Service for sales pipeline operations
+   * @param dateService - Service for date formatting
    */
   constructor(private pipelineRepository: SalesPipelineRepository,
     private dateService: DateFormaterService) {
   }
 
+  /**
+   * Initializes the component and loads sales pipelines
+   */
   ngOnInit(): void {
     //TODO: If consultant, should display only his/her pipelines
     const filterRequest = new FilterRequest();
@@ -63,10 +68,19 @@ export class SalespipelineComponent implements OnInit {
   }
 
   //#region Pipeline stages
+  /**
+   * Formats a date for display
+   * @param date - The date to format
+   * @returns Formatted date string
+   */
   public DateFormat(date: Date) {
     return this.dateService.getDateLabel(date);
   }
 
+  /**
+   * Handles drag and drop events for lead stages
+   * @param event - The drag and drop event
+   */
   public drop(event: CdkDragDrop<LeadStage[]>) {
     let targetStageId: number | null = null;
 
@@ -115,12 +129,23 @@ export class SalespipelineComponent implements OnInit {
     this.updateLeadStage(targetStage!.leads, targetStageId);
   }
 
+  /**
+   * Updates lead stage positions
+   * @param leadStage - Array of lead stages to update
+   * @param stageId - The stage ID (optional)
+   * @private
+   */
   private updateLeadStage(leadStage: LeadStage[], stageId: number | null) {
     this.pipelineRepository.updateLeadStage(leadStage, stageId).subscribe();
   }
   //#endregion
 
   //#region Pipelines (menu)
+  /**
+   * Builds the pipeline menu items
+   * @param pipelines - Array of sales pipelines
+   * @private
+   */
   private buildPipeMenuList(pipelines: SalesPipeline[]) {
     this.items = [];
 
@@ -133,6 +158,11 @@ export class SalespipelineComponent implements OnInit {
     })
   }
 
+  /**
+   * Fetches a sales pipeline by ID
+   * @param id - The pipeline ID
+   * @private
+   */
   private fetchSalesPipelineById(id: number) {
     this.pipelineRepository.fetchSalesPepilineById(id).subscribe(r => {
       this.selectedPipeline = r.model;
@@ -140,16 +170,27 @@ export class SalespipelineComponent implements OnInit {
   }
   //#endregion
 
+  /**
+   * Toggles the pipeline edit mode
+   */
   public editSalesPipelines() {
     this.openPipeEdit = !this.openPipeEdit;
   }
 
 //TODO: Creates a component for this dialogs
   //#region Dialogs
+  /**
+   * Initializes row editing for a pipeline
+   * @param pipeline - The pipeline to edit
+   */
   onRowEditInit(pipeline: SalesPipeline) {
     this.clonedPipelines[pipeline.id] = { ...pipeline };
   }
 
+  /**
+   * Saves changes to a pipeline row
+   * @param pipeline - The pipeline to save
+   */
   public onRowEditSave(pipeline: SalesPipeline) {
     if (pipeline.id == this.selectedPipeline.id)
       this.selectedPipeline.name = pipeline.name;
@@ -167,19 +208,33 @@ export class SalespipelineComponent implements OnInit {
     this.pipelineRepository.updateSalesPepilines([pipeline]).subscribe();
   }
 
+  /**
+   * Cancels row editing for a pipeline
+   * @param pipeline - The pipeline being edited
+   * @param index - The index of the pipeline
+   */
   public onRowEditCancel(pipeline: SalesPipeline, index: number) {
     this.pipelines[index] = this.clonedPipelines[pipeline.id];
     delete this.clonedPipelines[pipeline.id];
   }
 
+  /**
+   * Opens the dialog for creating a new pipeline
+   */
   public openDialogNewPipeline() {
     this.pipeline = {};
     this.buildPipelineForm();
     this.enableNewPipelineDialog = true;
   }
 
+  /**
+   * Hides the new pipeline dialog
+   */
   public hideDialog = () => this.enableNewPipelineDialog = false;
 
+  /**
+   * Saves a new pipeline
+   */
   public savePipeline() {
     if (this.pipeForm.invalid) {
       this.pipeForm.markAllAsTouched();
@@ -205,6 +260,10 @@ export class SalespipelineComponent implements OnInit {
     });
   }
 
+  /**
+   * Builds the pipeline form with validation
+   * @private
+   */
   private buildPipelineForm() {
     this.pipeForm = this.formBuilder.group({
       name: ['', Validators.required]
@@ -213,20 +272,34 @@ export class SalespipelineComponent implements OnInit {
   //#endregion
 
   //#region Edit Pipeline Stages
+  /**
+   * Opens the dialog for creating a new pipeline stage
+   */
   public openDialogNewStage() {
     this.pipeline = {};
     //this.buildPipelineForm();
     this.openAddStageDialog = true;
   }
 
+  /**
+   * Toggles the stage edit mode
+   */
   public openEditStage() {
     this.openStageEdit = !this.openStageEdit;
   }
 
+  /**
+   * Initializes row editing for a pipeline stage
+   * @param stage - The stage to edit
+   */
   public onRowEditStageInit(stage: PipelineStage) {
     this.clonedPipelineStage[stage.id] = { ...stage };
   }
 
+  /**
+   * Saves changes to a pipeline stage row
+   * @param stage - The stage to save
+   */
   public onRowEditStageSave(stage: PipelineStage) {
     delete this.clonedPipelineStage[stage.id];
 
@@ -236,6 +309,11 @@ export class SalespipelineComponent implements OnInit {
     }
   }
 
+  /**
+   * Cancels row editing for a pipeline stage
+   * @param stage - The stage being edited
+   * @param index - The index of the stage
+   */
   public onRowEditStageCancel(stage: PipelineStage, index: number) {
     this.pipelineStages[index] = this.clonedPipelineStage[stage.id];
     delete this.clonedPipelineStage[stage.id];

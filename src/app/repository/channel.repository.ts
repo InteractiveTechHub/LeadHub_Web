@@ -13,6 +13,11 @@ export class ChannelRepository {
 
   constructor(private httpClient: HttpClient) { }
 
+  /**
+   * Fetches integration channels based on filter criteria
+   * @param filterRequest - Filter criteria for integration channels
+   * @returns Observable with integration response data
+   */
   fetchChannelsByRequest(filterRequest: FilterRequest) : Observable<IntegrationResponse> {
     return this.httpClient.post<IntegrationResponse>(`${this.baseUrl}`, filterRequest);
   }

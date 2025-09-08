@@ -42,11 +42,19 @@ export class SignalRService {
     });
   }
 
+  /**
+   * Starts the SignalR hub connection
+   * @private
+   */
   private startConnection() {
     this.hubConnection.start()
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
+  /**
+   * Handles reconnection logic and re-subscribes to events
+   * @private
+   */
   private reconnect() {
     this.hubConnection.onreconnected(() => {
       // Important: re-subscribe after reconnection
@@ -84,6 +92,7 @@ export class SignalRService {
 
   /**
    * Subscribe to new messages in real-time
+   * @private
    */
   private receiveNewMessage() {
     this.hubConnection.on('newMessage', () => {

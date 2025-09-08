@@ -94,6 +94,9 @@ export class LeadsManagerComponent implements OnInit {
     private signalReService: SignalRService,
     private datePipe: DatePipe) {}
 
+  /**
+   * Initializes the component and sets up subscriptions
+   */
   ngOnInit(): void {
     this.filterRequest.pageSize = 20;
     this.filterRequest.skip = 0;
@@ -120,14 +123,29 @@ export class LeadsManagerComponent implements OnInit {
       });
   }
 
+  /**
+   * Formats a date to display format
+   * @param data - The date to format
+   * @returns Formatted date string
+   */
   DateFormat(data: Date) {
     return this.datePipe.transform(data, 'dd/MM/yyyy HH:mm');
   }
 
+  /**
+   * Formats a date for message display
+   * @param date - The date to format
+   * @returns Formatted date label
+   */
   DateFormatMessage(date: Date) {
    return this.dateService.getDateLabel(date);
   }
 
+  /**
+   * Gets the CSS styles for a lead card based on selection state
+   * @param item - The lead card item
+   * @returns Object containing CSS styles
+   */
   getCardStyles(item: any): { [key: string]: string } {
     const isSelected = item.leadId === this.selectedCard?.leadId;
 
@@ -140,6 +158,10 @@ export class LeadsManagerComponent implements OnInit {
     };
   }
 
+  /**
+   * Handles scroll events for pagination (currently disabled)
+   * @param index - The scroll index
+   */
   onScroll(index: any) {
     // TODO: Apply pagination
     /*if (index > this.leadCards.length - 10 && !this.isLoading) {
@@ -147,6 +169,10 @@ export class LeadsManagerComponent implements OnInit {
     }*/
   }
 
+  /**
+   * Selects a lead and loads its templates
+   * @param leadCard - The lead card to select
+   */
   selectLead(leadCard: LeadCard) {
     const response = this.managerRepository.fetchTemplatesByLeadId(leadCard.leadId!);
     response.subscribe(res => {
@@ -155,6 +181,10 @@ export class LeadsManagerComponent implements OnInit {
     });
   }
 
+  /**
+   * Loads the list of lead cards from the API
+   * @private
+   */
   private loadLeadCardList() {
     if (this.isLoading) return;
     this.isLoading = true;

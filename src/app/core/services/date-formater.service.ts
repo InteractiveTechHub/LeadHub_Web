@@ -10,6 +10,12 @@ export class DateFormaterService {
 
   constructor(private datePipe: DatePipe, private translate: TranslateService) {}
 
+  /**
+   * Formats a date into a human-readable label based on relative time
+   * @param date - The date to format
+   * @param isShowToday - Whether to show "Today" label for today's date
+   * @returns Formatted date string (time, "Today", "Yesterday", weekday, or full date)
+   */
   getDateLabel(date: Date, isShowToday: boolean = false) {
     const today = new Date();
     const messageDate = new Date(date);

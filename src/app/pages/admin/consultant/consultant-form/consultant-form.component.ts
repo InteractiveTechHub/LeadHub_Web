@@ -41,6 +41,14 @@ export class ConsultantFormComponent implements OnInit {
     { name: 'Consultant' },
   ];
 
+  /**
+   * Constructor for the ConsultantFormComponent
+   * @param consultantRepository - Service for consultant operations
+   * @param companyRepository - Service for company operations
+   * @param authService - Service for authentication operations
+   * @param route - Angular route service
+   * @param cdr - Change detector reference
+   */
   constructor(
     private consultantRepository: ConsultantRepository,
     private companyRepository: CompanyRepository,
@@ -49,6 +57,9 @@ export class ConsultantFormComponent implements OnInit {
     private cdr: ChangeDetectorRef) {
   }
 
+  /**
+   * Initializes the component and sets up the form
+   */
   ngOnInit(): void {
     const consultantIdParams = this.route.snapshot.paramMap.get('id');
     this.targetCompanies = [];
@@ -65,6 +76,9 @@ export class ConsultantFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Handles form submission for creating or updating consultants
+   */
   public async submitAsync() {
     if (!this.consultantForm?.valid)
       return;
@@ -96,6 +110,11 @@ export class ConsultantFormComponent implements OnInit {
     this.createConsultantAsync(registerModel);
   }
 
+  /**
+   * Creates a new consultant asynchronously
+   * @param registerModel - The consultant data to create
+   * @private
+   */
   private createConsultantAsync(registerModel: RegisterModel) {
 
     // create credentials
@@ -110,6 +129,10 @@ export class ConsultantFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Builds the consultant form with validation rules
+   * @private
+   */
   private buildConsultantForm() {
     this.consultantForm = this.formBuilder.group({
       consultantData: this.formBuilder.group({
@@ -128,6 +151,10 @@ export class ConsultantFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Builds the roles dropdown based on user permissions
+   * @private
+   */
   private buildRolesDropdDown() {
     const roleExclusions: { [key: string]: string[] } = {
       isSupport: ['SysAdmin'],
@@ -144,6 +171,10 @@ export class ConsultantFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Fetches companies for the dropdown
+   * @private
+   */
   private fetchCompanyByRequest() {
     const filterRequest = new FilterRequest();
     //filterRequest.addFilter();
@@ -156,6 +187,11 @@ export class ConsultantFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Fetches consultant data by ID for editing
+   * @param consultantId - The consultant ID
+   * @private
+   */
   private fetchConsultantId(consultantId: string) {
     const filter = new FilterRequest();
     filter.addFilter('Id', 'equals', 'and', consultantId, 'u');
@@ -188,6 +224,11 @@ export class ConsultantFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Updates an existing consultant
+   * @param registerModel - The consultant data to update
+   * @private
+   */
   private updateConsultant(registerModel: RegisterModel) {
     const response = this.authService.updateCuthenticationAndConsultant(registerModel);
 

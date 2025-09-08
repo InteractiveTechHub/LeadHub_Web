@@ -18,18 +18,33 @@ export class ChatMessageService {
 
   constructor() { }
 
+  /**
+   * Sends a timeline message to subscribers
+   * @param timeline - The timeline object containing message data
+   */
   sendMessage(timeline: Timeline) {
     this.messageSubject.next(timeline);
   }
 
+  /**
+   * Sends files to subscribers for upload
+   * @param file - The file object to be sent
+   */
   sendFiles(file: any) {
     this.filesSubject.next(file);
   }
 
+  /**
+   * Triggers an update event for lead cards
+   */
   updateLeadsCard() {
     this.leadCardSubject.next();
   }
 
+  /**
+   * Updates the chat message toolbox visibility state
+   * @param canSendMessage - Boolean indicating if messages can be sent
+   */
   updateChatMessageToolBox(canSendMessage: boolean) {
     this.chatMessageToolBoxSubject.next(canSendMessage);
   }
